@@ -52,7 +52,7 @@ Those are simply unacceptable from a gameplay perspective.
 The answer to this is simple: subspaces. Each player plays in his own timeline, and may catch up with the server.
 The server time is simply the highest available.
 
-This system implies a very simple, very important rule: _one cannot interact with a vessel's past._ **Ever.**
+This system implies a very simple, very important rule: _one cannot interact with a vessel's past or future._ **Ever.**
 
 Reason is that you weren't there at that time.
 So you shouldn't interfere with the vessel if you have not caught up with it.

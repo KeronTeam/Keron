@@ -10,17 +10,8 @@ Heavy inspiration from and credits to [KMP](https://github.com/TehGimp/KerbalMul
 Design
 ------
 
-The server runs in non-authoritative fashion: clients send updates and they are broadcasted to everybody through the server.
-
-Each client runs in their own subspace. It enables everyone to warp at will.
-Players can synchronize with each other:
-
-* Future ships will only appear when on rails. This means one cannot disturb a ship which is not online.
-* Past ship will appear iff on rails.
-
-It enables players to move back and forth in their timelines.
-
-Vessels are online iff they are on-rails, i.e. on a stable orbit.
+The server runs in non-authoritative fashion:
+clients send updates and they are broadcasted to everybody through the server.
 
 ### KSC
 
@@ -41,6 +32,45 @@ Example:
   He can clear it using the standard _Clear Launchpad_ button.
 
 If a player disconnects while in a corridor, its vessel shall be destroyed immediately.
+
+### Warp
+
+Warping handling is probably _the_ most challenging issue of networked KSP.
+Disabling it all together is not a valid option (who would spend _months_ to get to Eve,
+or simply _hours_ to get to the Mun?).
+
+Same goes with a shared warp-time
+
+Imagine:
+> Got to go to Eve. warping x1000. Sorry folks who were doing high-precision docking manoeuvers!
+
+Or even:
+> Got to re-entry. I take the lock on the time. Sorry folks who'd like to go to Eve before retirement!
+
+Those are simply unacceptable from a gameplay perspective.
+
+The answer to this is simple: subspaces. Each player plays in his own timeline, and may catch up with the server.
+The server time is simply the highest available.
+
+This system implies a very simple, very important rule: _one cannot interact with a vessel's past._ **Ever.**
+
+Reason is that you weren't there at that time.
+So you shouldn't interfere with the vessel if you have not caught up with it.
+It's completely unlogical from a realistic perspective but we believe it to be to the gameplay's profits.
+And we would not have to deal with alternatives futures, which would be a mess.
+
+Moreover a player may never go back in his own timeline (just trust the Time Lords on this).
+
+This together means:
+
+* **Late** players would see a replay of future ships, as well as their trajectories.
+* **Current** players would see past ship with a predicted trajectories, which may change at any time.
+
+> But what happens if a past ship is on collision course with a future ship?
+
+Well, that's tricky. Let me put that simply: **they will collide at the point and time they should collide.**.
+
+Multiplayer KSP is no fairy tale.
 
 Technicalities
 --------------

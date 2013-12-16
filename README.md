@@ -75,7 +75,12 @@ Multiplayer KSP is no fairy tale.
 Technicalities
 --------------
 
-The client is a standard KSP Plugin which leverage Unity Networking functionalities.
+The client is a standard KSP Plugin. Though it originally intended to leverage Unity Networking functionalities, this turned out a dead end (basically, client would have to maintain deep copies of watched objects for the network serializer to kick in).
 
-The server is developped in C++ for technical reasons, using RakNet 3.732 (the one that matches Unity at the time of this writing).
-The server project uses CMake for portability.
+Instead, we use [Lidgren.Net](http://code.google.com/p/lidgren-network-gen3/).
+
+Both the client and the server are written in C# and relies on:
+
+* KSP (duh).
+* [Lidgren.Net](http://code.google.com/p/lidgren-network-gen3/)
+* [ZLibNet](https://zlibnet.codeplex.com/) and [ZLib](http://zlib.net/) (used for compressing _large_ datasets)

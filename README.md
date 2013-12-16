@@ -3,7 +3,7 @@ Keron
 
 **Ker**bal **On**line.
 
-Use Unity Network features, enabling you to play with friends (and foes?).
+Enabling you to play with friends (and foes?).
 
 Heavy inspiration from and credits to [KMP](https://github.com/TehGimp/KerbalMultiPlayer).
 
@@ -63,8 +63,8 @@ Moreover a player may never go back in his own timeline (just trust the Time Lor
 
 This together means:
 
-* **Late** players would see a replay of future ships, as well as their trajectories.
-* **Current** players would see past ship with a predicted trajectories, which may change at any time.
+* **Late** players would see a _replay_ of future ships, as well as their trajectories.
+* **Current** players would see past ship with a _predicted trajectories_, which may change at any time.
 
 > But what happens if a past ship is on collision course with a future ship?
 

@@ -7,6 +7,39 @@ Enabling you to play with friends (and foes?).
 
 Heavy inspiration from and credits to [KMP](https://github.com/TehGimp/KerbalMultiPlayer).
 
+Dependencies
+------------
+
+- [ENet](http://enet.bespin.org/): Network library.
+- [ENetCS](https://github.com/KeronTeam/enetcs): ENet for C# bindings.
+- [FlatBuffers](https://github.com/google/flatbuffers): Serialization library.
+
+Building
+--------
+
+The project dependencies are rather small and self-sufficient.
+Therefore, we use [submodules](http://www.git-scm.com/book/en/v2/Git-Tools-Submodules) to guarantee
+that we share the same version across all builds.
+
+Get the submodules:
+```sh
+git submodule init
+git submodule update
+```
+
+
+Get a copy of [Premake 5](http://premake.bitbucket.org/download.html#v5), and make it available in your PATH.
+Then run premake with your flavor of arguments:
+```sh
+# Linux build
+premake5 --cc=clang gmake
+
+# Windows build
+premake5 vs2013
+```
+
+Your solution/Makefile files will be in the `build/` directory.
+
 Design
 ------
 

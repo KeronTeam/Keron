@@ -1,0 +1,9 @@
+[submodule "flatbuffers"]
+	path = flatbuffers
+	url = https://github.com/google/flatbuffers.git
+[submodule "enetcs"]
+	path = enetcs
+	url = https://github.com/KeronTeam/enetcs
+[submodule "enet"]
+	path = enet
+	url = https://github.com/lsalzman/enet.git

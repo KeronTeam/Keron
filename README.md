@@ -43,14 +43,14 @@ Your solution/Makefile files will be in the `build/` directory.
 Design
 ------
 
-**THIS SECTION NEEDS REFINEMENTS**. See the issues for details.
+**THIS SECTION IS OUT OF DATE**. See the issues for details.
 
 The server runs in non-authoritative fashion:
 clients send updates and they are broadcasted to everybody through the server.
 
 ### KSC
 
-**THIS SECTION NEEDS REFINEMENTS**. See the issues for details.
+**THIS SECTION IS OUT OF DATE**. See the issues for details.
 
 The KSC launchpad and runway are viewed as shared resources: one player is allowed at a given time.
 
@@ -72,7 +72,7 @@ If a player disconnects while in a corridor, its vessel shall be destroyed immed
 
 ### Warp
 
-**THIS SECTION NEEDS REFINEMENTS**. See the issues for details.
+**THIS SECTION IS OUT OF DATE**. See the issues for details.
 
 Warping handling is probably _the_ most challenging issue of networked KSP.
 Disabling it all together is not a valid option (who would spend _months_ to get to Eve,
@@ -114,6 +114,7 @@ Multiplayer KSP is no fairy tale.
 Technicalities
 --------------
 
+**THIS SECTION IS OUT OF DATE**. See the issues for details.
 
 The client is a standard KSP Plugin. Though it originally intended to leverage Unity Networking functionalities, this turned out a dead end (basically, client would have to maintain deep copies of watched objects for the network serializer to kick in).
 

@@ -7,12 +7,15 @@ Enabling you to play with friends (and foes?).
 
 Heavy inspiration from and credits to [KMP](https://github.com/TehGimp/KerbalMultiPlayer).
 
+If you are looking for a (somewhat) working product, please head over to [DarkMultiPlayer](https://github.com/godarklight/DarkMultiPlayer).
+
 Dependencies
 ------------
 
 - [ENet](http://enet.bespin.org/): Network library.
-- [ENetCS](https://github.com/KeronTeam/enetcs): ENet for C# bindings.
+- [ENetCS](https://github.com/KeronTeam/enetcs): ENet for C# bindings (client-side).
 - [FlatBuffers](https://github.com/google/flatbuffers): Serialization library.
+- [Vedis](https://github.com/symisc/vedis): redis-like embedded datastore (server-side).
 
 Building
 --------

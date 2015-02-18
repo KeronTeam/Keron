@@ -1,6 +1,30 @@
+newoption {
+    trigger = "arch",
+    description = "Which architecture to build. Defaults to the underlying platform if not provided.",
+    value = "ARCH",
+    allowed = {
+        { "x86", "32-bit" },
+        { "x32", "32-bit" },
+        { "x64", "64-bit" }
+    }
+}
+
+if not _OPTIONS["arch"] then
+    if os.is64bit() then
+        _OPTIONS["arch"] = "x64"
+    else
+        _OPTIONS["arch"] = "x32"
+    end
+end
+
+if _OPTIONS["arch"] == "x86" then
+    _OPTIONS["arch"] = "x32"
+end
+
 solution "Keron"
     configurations { "Debug", "Release" }
     location "build"
+    architecture (_OPTIONS["arch"])
 
     filter "language:C++"
         buildoptions { "-std=c++11" }
@@ -18,6 +42,7 @@ solution "Keron"
     project "flatc"
         kind "ConsoleApp"
         language "C++"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/bin"
         includedirs { "flatbuffers/include" }
         files {
                 "flatbuffers/include/flatbuffers.h",
@@ -36,6 +61,7 @@ solution "Keron"
         kind "StaticLib"
         language "C++"
         targetname "flatbuffers"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
         includedirs { "flatbuffers/include" }
         files {
             "flatbuffers/include/flatbuffers.h",
@@ -49,13 +75,15 @@ solution "Keron"
 	kind "SharedLib"
 	language "C#"
 	targetname "FlatBuffers"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
 	files { "flatbuffers/net/**.cs" }
 	links { "System.Core" }
 
     project "enet-static"
         kind "StaticLib"
         language "C"
-        targetname "enet"
+        targetname "enet-static"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
         files { "enet/*.c" }
         includedirs { "enet/include/" }
         defines {
@@ -69,6 +97,7 @@ solution "Keron"
         kind "SharedLib"
         language "C"
         targetname "enet"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
         files { "enet/*.c" }
         includedirs { "enet/include/" }
         defines {
@@ -79,23 +108,15 @@ solution "Keron"
         }
         
         filter "system:windows"
-                targetprefix ""
-                targetname "ENet"
-                architecture "x32"
-                targetsuffix "X86"
-		targetextension ".dll"
-
-        filter "system:linux"
-                targetname "enet"
-		targetextension ".so.1"
+                targetprefix "lib"
+                links { "Winmm", "Ws2_32" }
 
     project "ENet-net"
         kind "SharedLib"
         language "C#"
         framework "2.0"
         targetname "ENet"
+        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
         files { "enetcs/ENetCS/**.cs" }
-        buildoptions { "/unsafe+" }
+        flags { "Unsafe" }
         links { "System" }
-        filter "system:windows"
-            architecture "x32"

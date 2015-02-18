@@ -12,7 +12,7 @@ script:
   - premake5 --cc=clang --arch=x64 gmake
   # Circumvent https://bitbucket.org/premake/premake-dev/issue/258/response-file-doesnt-work-on-linux
   - sed -i '/\@echo/,/\.cs/ { s/\\/\//g; }' build/*.make
-  - make -C build/ verbose=1
+  - CC=clang CXX=clang++ make -C build/ verbose=1
 
 before_deploy:
   - cd build/

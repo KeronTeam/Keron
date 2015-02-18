@@ -1,0 +1,49 @@
+version: 1.0.{build}
+branches:
+  only:
+  - master
+configuration:
+  - Debug
+  - Release
+platform:
+  - x86
+  - x64
+environment:
+  matrix:
+  - VS_VERSION: vs2012
+  - VS_VERSION: vs2013
+install:
+  - cinst wget
+  - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
+  - unzip premake.zip
+  - move bin\release\premake5.exe .
+before_build:
+  - git submodule init
+  - git submodule update
+  - del /F /S build
+  - premake5.exe --arch=%PLATFORM% %VS_VERSION%
+  - dir
+  - dir build
+  - tree
+build:
+  project: build\Keron.sln
+  verbosity: normal
+after_build:
+  - tree
+artifacts:
+  - path: build\$(configuration-$(platform)
+    name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)
+    type: zip
+
+deploy:
+  # Easy merging with Travis which cannot (yet) set a release name...
+  release: $(appveyor_repo_tag_name)
+  provider: GitHub
+  auth_token:
+    secure: 57Q/XmAwYwOJfkfUv6axIuO4ZPQsrB3AbjH6ofQki1hLkolCii42C7ZnLYkDn/eY
+  artifact: keron-win-$(configuration)-$(platform)-$(VS_VERSION)
+  draft: true
+  on:
+    branch: master
+    appveyor_repo_tag: true
+    configuration: Release

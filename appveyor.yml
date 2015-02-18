@@ -31,7 +31,7 @@ build:
 after_build:
   - tree
 artifacts:
-  - path: build\$(configuration)-$(platform)
+  - path: build\$(configuration)-*
     name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)
     type: zip
 

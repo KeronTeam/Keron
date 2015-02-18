@@ -29,9 +29,10 @@ build:
   project: build\Keron.sln
   verbosity: normal
 after_build:
+  - if "%PLATFORM%"=="x86" move /y build\%CONFIGURATION%-x32 build\%CONFIGURATION%-x86
   - tree
 artifacts:
-  - path: build\$(configuration)-*
+  - path: build\$(configuration)-$(platform)
     name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)
     type: zip
 

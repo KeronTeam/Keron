@@ -121,6 +121,8 @@ solution "Keron"
         filter "system:windows"
                 targetprefix "lib"
                 links { "Winmm", "Ws2_32" }
+        filter "system:macosx"
+                targetextension ".so"
 
     project "ENet-net"
         kind "SharedLib"

@@ -25,7 +25,7 @@ function prebuildschemas()
 	local flatc = path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
         flatc = path.normalize(flatc)
         local out_dir = path.normalize(path.join("%{sln.location}", "schemas"))
-        local schemas_dir = path.normalize(path.join("..", "schemas", "*"))
+        local schemas_dir = path.normalize(path.join(_WORKING_DIR, "schemas", "*"))
 	prebuildcommands {
                 flatc .. " -o " .. out_dir .. " -c -n " .. schemas_dir
 	}

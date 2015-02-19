@@ -23,7 +23,10 @@ end
 
 function prebuildschemas()
 	prebuildcommands {
-		"%{sln.location}/%{cfg.buildcfg}-%{cfg.architecture}/bin/flatc -o %{sln.location}/schemas -c -n ../schemas/*"
+		path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
+                .. " -o "
+                .. path.join("%{sln.location}", "schemas")
+                .. " -c -n " .. path.join("..", "schemas", "*")
 	}
 end
 

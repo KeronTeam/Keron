@@ -74,6 +74,7 @@ solution "Keron"
     project "flatbuffers-net"
 	kind "SharedLib"
 	language "C#"
+	framework "2.0"
 	targetname "FlatBuffers"
         targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
 	files { "flatbuffers/net/**.cs" }

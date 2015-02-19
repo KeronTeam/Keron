@@ -22,14 +22,18 @@ if _OPTIONS["arch"] == "x86" then
 end
 
 function prebuildschemas()
+	local flatc = path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
+        flatc = path.normalize(flatc)
+        local out_dir = path.normalize(path.join("%{sln.location}", "schemas"))
+        local schemas_dir = path.normalize(path.join("..", "schemas", "*"))
 	prebuildcommands {
-		path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
-                .. " -o "
-                .. path.join("%{sln.location}", "schemas")
-                .. " -c -n " .. path.join("..", "schemas", "*")
+                flatc .. " -o " .. out_dir .. " -c -n " .. schemas_dir
 	}
 end
 
+local target_outdir = path.join("build", "%{cfg.buildcfg}-%{cfg.architecture}")
+local bin_outdir = path.join(target_outdir, "bin")
+local lib_outdir = path.join(target_outdir, "lib")
 
 solution "Keron"
     configurations { "Debug", "Release" }
@@ -52,7 +56,7 @@ solution "Keron"
     project "flatc"
         kind "ConsoleApp"
         language "C++"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/bin"
+        targetdir(bin_outdir)
         includedirs { "flatbuffers/include" }
         files {
                 "flatbuffers/include/flatbuffers.h",
@@ -71,7 +75,7 @@ solution "Keron"
         kind "StaticLib"
         language "C++"
         targetname "flatbuffers"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
+        targetdir(lib_outdir)
         includedirs { "flatbuffers/include" }
         files {
             "flatbuffers/include/flatbuffers.h",
@@ -86,7 +90,7 @@ solution "Keron"
 	language "C#"
 	framework "3.5"
 	targetname "FlatBuffers"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
+        targetdir(lib_outdir)
 	files { "flatbuffers/net/**.cs" }
 	links { "System.Core" }
 
@@ -94,7 +98,7 @@ solution "Keron"
         kind "StaticLib"
         language "C"
         targetname "enet-static"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
+        targetdir(lib_outdir)
         files { "enet/*.c" }
         includedirs { "enet/include/" }
         defines {
@@ -108,7 +112,7 @@ solution "Keron"
         kind "SharedLib"
         language "C"
         targetname "enet"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
+        targetdir(lib_outdir)
         files { "enet/*.c" }
         includedirs { "enet/include/" }
         defines {
@@ -129,7 +133,7 @@ solution "Keron"
         language "C#"
         framework "3.5"
         targetname "ENet"
-        targetdir "build/%{cfg.buildcfg}-%{cfg.architecture}/lib"
+        targetdir(lib_outdir)
         files { "enetcs/ENetCS/**.cs" }
         flags { "Unsafe" }
         links { "System" }
@@ -137,6 +141,8 @@ solution "Keron"
     project "server"
         kind "ConsoleApp"
 	language "C++"
+        targetname "keron-server"
+        targetdir(bin_outdir)
 	includedirs {
 		"server/include",
                 "enet/include",

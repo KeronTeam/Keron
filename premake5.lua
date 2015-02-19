@@ -134,6 +134,7 @@ solution "Keron"
 	language "C++"
 	includedirs {
 		"server/include",
+                "enet/include",
 		"flatbuffers/include",
 		"%{sln.location}/schemas"
 	}

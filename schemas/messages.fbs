@@ -1,0 +1,23 @@
+// Messages exchanged between client and server.
+include "flightctrlstate.fbs";
+
+namespace keron.messages;
+union Type {
+  Chat,
+  FlightCtrl
+}
+
+table Chat  {
+    from: string;
+    message: string;
+}
+
+table FlightCtrl {
+    state: FlightCtrlState;
+}
+
+table Message {
+    message:Type;
+}
+
+root_type Message;

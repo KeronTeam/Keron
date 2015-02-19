@@ -21,6 +21,13 @@ if _OPTIONS["arch"] == "x86" then
     _OPTIONS["arch"] = "x32"
 end
 
+function prebuildschemas()
+	prebuildcommands {
+		"%{sln.location}/%{cfg.buildcfg}-%{cfg.architecture}/bin/flatc -o %{sln.location}/schemas -c -n ../schemas/*"
+	}
+end
+
+
 solution "Keron"
     configurations { "Debug", "Release" }
     location "build"
@@ -121,3 +128,15 @@ solution "Keron"
         files { "enetcs/ENetCS/**.cs" }
         flags { "Unsafe" }
         links { "System" }
+
+    project "server"
+        kind "ConsoleApp"
+	language "C++"
+	includedirs {
+		"server/include",
+		"flatbuffers/include",
+		"%{sln.location}/schemas"
+	}
+	files { "server/src/**.cpp" }
+	links { "flatbuffers-cpp", "enet-static" }
+	prebuildschemas()

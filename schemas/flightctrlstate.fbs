@@ -1,0 +1,22 @@
+namespace keron;
+enum FlightCtrlStateToggles: byte (bit_flags) {
+    gearDown,
+    gearUp,
+    headlight,
+    killRot
+}
+
+table FlightCtrlState {
+    fastThrottle:float;
+    toggles:FlightCtrlStateToggles;
+    mainThrottle:float;
+    pitch:float;
+    pitchTrim:float;
+    roll:float;
+    rollTrim:float;
+    X:float;
+    Y:float;
+    yaw:float;
+    yawTrim:float;
+    Z:float;
+}

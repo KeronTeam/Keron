@@ -1,13 +1,11 @@
 #include "signal_handlers.h"
 
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
+#include <cstring>
 
 #include <iostream>
 
-#include <unistd.h>
-#include <signal.h>
-#include <cstring>
+#define WIN32_LEAN_AND_MEAN 1
+#include <windows.h>
 
 
 namespace keron {

@@ -162,7 +162,7 @@ solution "Keron"
 		"%{sln.location}/schemas"
 	}
 	files { "server/src/**.cpp" }
-	links { "flatbuffers-cpp", "enet-static" }
+	links { "flatbuffers-cpp", "enet-static", "vedis" }
 	prebuildschemas()
 
 	filter "system:windows"

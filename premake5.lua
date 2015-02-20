@@ -114,6 +114,11 @@ solution "Keron"
         filter "system:macosx"
             removedefines {"HAS_GETHOSTBYNAME_R", "HAS_GETHOSTBYADDR_R"}
 
+    project "vedis"
+        kind "StaticLib"
+	language "C"
+	files { "vedis/vedis.c" }
+	includedirs { "vedis/" }
 
      project "enet-shared"
         kind "SharedLib"

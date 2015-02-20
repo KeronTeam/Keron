@@ -162,5 +162,6 @@ solution "Keron"
 
 	filter "system:windows"
 	    removefiles { "server/src/os/posix.cpp" }
+	    links { "Winmm", "Ws2_32" }
 	filter "system:linux or macosx"
 	    removefiles { "server/src/os/windows.cpp" }

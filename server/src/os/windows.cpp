@@ -10,7 +10,7 @@
 
 namespace keron {
 namespace server {
-std::atomic_int stop(0);
+std::atomic_int stop{0};
 
 static BOOL handler(DWORD fdwCtrlType)
 {

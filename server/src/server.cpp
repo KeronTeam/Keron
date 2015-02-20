@@ -4,15 +4,22 @@
 #include <atomic>
 #include <vector>
 #include <functional>
+#include <type_traits>
+
+#include <flatbuffers/flatbuffers.h>
+#include <flatbuffers/idl.h>
+#include <flatbuffers/util.h>
 
 #include "libenet.h"
 #include "signal_handlers.h"
 
 #include "flightctrlstate_generated.h"
 #include "netmessages_generated.h"
+#include "server_generated.h"
 
 
 using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)>;
+using config_ptr = std::unique_ptr<const keron::server::Configuration>;
 
 void msg_none(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)
 {
@@ -40,6 +47,40 @@ int main(void)
 	if (errcode)
 		return errcode;
 
+	std::string filename("server.json");
+	std::string serverschema;
+	std::string configjson;
+
+	if (!flatbuffers::LoadFile("schemas/server.fbs", false, &serverschema)) {
+		std::cerr << "Cannot load server schema." << std::endl;
+		return -1;
+	}
+
+	flatbuffers::Parser parser;
+	parser.Parse(serverschema.c_str());
+	if (!flatbuffers::LoadFile(filename.c_str(), false, &configjson)) {
+		std::cerr << "No server configuration found. Creating a default one." << std::endl;
+		flatbuffers::FlatBufferBuilder fbb;
+		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8);
+		auto generator = flatbuffers::GeneratorOptions();
+		generator.strict_json = true;
+		FinishConfigurationBuffer(fbb, cfg);
+		flatbuffers::GenerateText(parser, fbb.GetBufferPointer(), generator, &configjson);
+
+		if (!flatbuffers::SaveFile(filename.c_str(), configjson.c_str(), configjson.size(), false)) {
+			std::cerr << "Unable to write default configuration!" << std::endl;
+			return -2;
+		}
+
+		std::cerr << "A default configuration has been written.\n"
+			<< "Check the content of `server.json`, and restart the server." << std::endl;
+		return -4;
+	}
+
+	parser.Parse(configjson.c_str());
+
+	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+
 	std::vector<msg_handler> handlers(16);
 	handlers[keron::messages::Type_NONE] = msg_none;
 	handlers[keron::messages::Type_Chat] = msg_chat;
@@ -47,9 +88,17 @@ int main(void)
 
 	keron::net::library enet;
 	ENetAddress address;
-	address.host = ENET_HOST_ANY;
-	address.port = 54321;
-	keron::net::host host(address, 8, 2);
+
+	if (strncmp(settings->address()->c_str(), "*", 1) == 0) {
+		std::cout << "any" << std::endl;
+		address.host = ENET_HOST_ANY;
+	}
+	else
+		enet_address_set_host(&address, settings->address()->c_str());
+
+	address.port = settings->port();
+	keron::net::host host(address, settings->maxclients(), 2);
+	std::cout << "address.host = " << address.host << ", port = " << address.port << std::endl;
 
 	if (!host) {
 		std::cerr << "ERROR: creating host." << std::endl;
@@ -58,7 +107,8 @@ int main(void)
 
 	keron::net::event event;
 
-	std::cout << "Waiting for inputs." << std::endl;
+	std::cout << "Listening on " << settings->address()->c_str() << ":" << settings->port()
+		<< " " << settings->maxclients() << " clients allowed." << std::endl;
 
 	while (host.service(event, 100) >= 0 && !keron::server::stop) {
 		switch (event.type) {

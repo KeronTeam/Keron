@@ -164,6 +164,10 @@ solution "Keron"
 	files { "server/src/**.cpp" }
 	links { "flatbuffers-cpp", "enet-static", "vedis" }
 	prebuildschemas()
+	postbuildcommands {
+		"{MKDIR} " .. path.join(_WORKING_DIR, bin_outdir, "schemas"),
+		"{COPY} " .. path.join(_WORKING_DIR, "schemas", "server.fbs") .. " " .. path.join(_WORKING_DIR, bin_outdir, "schemas")
+	}
 
 	filter "system:windows"
 	    removefiles { "server/src/os/posix.cpp" }

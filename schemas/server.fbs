@@ -1,0 +1,10 @@
+// server specific items.
+namespace keron.server;
+
+table Configuration {
+    address:string;
+    port:ushort;
+    maxclients:uint;
+}
+
+root_type Configuration;

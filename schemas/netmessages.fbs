@@ -16,8 +16,8 @@ table FlightCtrl {
     state: FlightCtrlState;
 }
 
-table Message {
+table NetMessage {
     message:Type;
 }
 
-root_type Message;
+root_type NetMessage;

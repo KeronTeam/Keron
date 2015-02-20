@@ -6,20 +6,20 @@
 #include <functional>
 
 #include "flightctrlstate_generated.h"
-#include "messages_generated.h"
+#include "netmessages_generated.h"
 
 #include "libenet.h"
 #include "signal_handlers.h"
 
 
-using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::Message &)>;
+using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)>;
 
-void msg_none(keron::net::host &, const keron::net::event &, const keron::messages::Message &)
+void msg_none(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)
 {
 	std::cout << "No message.\n";
 }
 
-void msg_chat(keron::net::host &host, const keron::net::event &event, const keron::messages::Message &msg)
+void msg_chat(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &msg)
 {
 	auto chat = reinterpret_cast<const keron::messages::Chat *>(msg.message());
 	std::cout << "Chat message: " << chat->message()->c_str() << std::endl;
@@ -27,7 +27,7 @@ void msg_chat(keron::net::host &host, const keron::net::event &event, const kero
 	host.broadcast(event.channelID, response);
 }
 
-void msg_flightctrl(keron::net::host &host, const keron::net::event &event, const keron::messages::Message &flight)
+void msg_flightctrl(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &flight)
 {
 	auto flightCtrl = reinterpret_cast<const keron::messages::FlightCtrl *>(flight.message());
 	std::cout << "Flight control state" << std::endl;
@@ -73,13 +73,13 @@ int main(void)
 					<< " size " << packet.length() << std::endl;
 
 				flatbuffers::Verifier verifier(packet.data(), packet.length());
-				if (!keron::messages::VerifyMessageBuffer(verifier)) {
+				if (!keron::messages::VerifyNetMessageBuffer(verifier)) {
 					std::cout << "Incorrect buffer received." << std::endl;
 					break;
 				}
 					
 
-				auto message = keron::messages::GetMessage(packet.data());
+				auto message = keron::messages::GetNetMessage(packet.data());
 				auto type = message->message_type();
 				std::cout << "Message is: " << keron::messages::EnumNameType(type) << std::endl;
 

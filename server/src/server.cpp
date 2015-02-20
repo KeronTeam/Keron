@@ -5,9 +5,6 @@
 #include <vector>
 #include <functional>
 
-#include <unistd.h>
-#include <signal.h>
-
 #include "libenet.h"
 #include "signal_handlers.h"
 

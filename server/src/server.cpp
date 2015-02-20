@@ -9,20 +9,12 @@
 #include <signal.h>
 
 #include "libenet.h"
+#include "signal_handlers.h"
 
 #include "flightctrlstate_generated.h"
 #include "messages_generated.h"
 
-// Using an atomic *might* be overkill.
-std::atomic_int stop(0);
-
 using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::Message &)>;
-
-static void shutdown(int, siginfo_t *, void *)
-{
-	std::cout << "The server is going DOWN!" << std::endl;
-	stop = 1;
-}
 
 void msg_none(keron::net::host &, const keron::net::event &, const keron::messages::Message &)
 {
@@ -45,25 +37,15 @@ void msg_flightctrl(keron::net::host &host, const keron::net::event &event, cons
 
 int main(void)
 {
-	struct sigaction action;
-	memset(&action, 0, sizeof(action));
+	int errcode = keron::server::register_signal_handlers();
+
+	if (errcode)
+		return errcode;
+
 	std::vector<msg_handler> handlers(16);
 	handlers[keron::messages::Type_NONE] = msg_none;
 	handlers[keron::messages::Type_Chat] = msg_chat;
 	handlers[keron::messages::Type_FlightCtrl] = msg_flightctrl;
-
-	action.sa_sigaction = &shutdown;
-	action.sa_flags = SA_SIGINFO;
-
-	if (sigaction(SIGTERM, &action, nullptr) < 0) {
-		perror("Cannot register TERM signal handler.");
-		return -1;
-	}
-
-	if (sigaction(SIGINT, &action, nullptr) < 0) {
-		perror("Cnnot register INT signal handler.");
-		return -2;
-	}
 
 	keron::net::library enet;
 	keron::net::host host({ .host = ENET_HOST_ANY, .port = 54321 }, 8, 2);
@@ -77,7 +59,7 @@ int main(void)
 
 	std::cout << "Waiting for inputs." << std::endl;
 
-	while (host.service(event, 100) >= 0 && !stop) {
+	while (host.service(event, 100) >= 0 && !keron::server::stop) {
 		switch (event.type) {
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
@@ -89,14 +71,23 @@ int main(void)
 					<< " on channel " << static_cast<int>(event.channelID)
 					<< " size " << packet.length() << std::endl;
 
+				flatbuffers::Verifier verifier(packet.data(), packet.length());
+				if (!keron::messages::VerifyMessageBuffer(verifier)) {
+					std::cout << "Incorrect buffer received." << std::endl;
+					break;
+				}
+					
+
 				auto message = keron::messages::GetMessage(packet.data());
 				auto type = message->message_type();
 				std::cout << "Message is: " << keron::messages::EnumNameType(type) << std::endl;
 
-				if (!(type < handlers.size()))
+				if (!(type < handlers.size())) {
 					std::cout << "No available handlers.";
-				else
-					handlers.at(type)(host, event, *message);
+					break;
+				}
+
+				handlers.at(type)(host, event, *message);
 
 			}
 				break;

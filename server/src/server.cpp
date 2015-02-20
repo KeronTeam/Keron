@@ -5,11 +5,12 @@
 #include <vector>
 #include <functional>
 
+#include "flightctrlstate_generated.h"
+#include "messages_generated.h"
+
 #include "libenet.h"
 #include "signal_handlers.h"
 
-#include "flightctrlstate_generated.h"
-#include "messages_generated.h"
 
 using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::Message &)>;
 

@@ -45,7 +45,10 @@ int main(void)
 	handlers[keron::messages::Type_FlightCtrl] = msg_flightctrl;
 
 	keron::net::library enet;
-	keron::net::host host({ .host = ENET_HOST_ANY, .port = 54321 }, 8, 2);
+	ENetAddress address;
+	address.host = ENET_HOST_ANY;
+	address.port = 54321;
+	keron::net::host host(address, 8, 2);
 
 	if (!host) {
 		std::cerr << "ERROR: creating host." << std::endl;

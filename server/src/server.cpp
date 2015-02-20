@@ -80,7 +80,7 @@ int main(void)
 					
 
 				auto message = keron::messages::GetNetMessage(packet.data());
-				auto type = message->message_type();
+				keron::messages::Type type = message->message_type();
 				std::cout << "Message is: " << keron::messages::EnumNameType(type) << std::endl;
 
 				if (!(type < handlers.size())) {

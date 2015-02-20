@@ -10,7 +10,6 @@ platform:
   - x64
 environment:
   matrix:
-  - VS_VERSION: vs2012
   - VS_VERSION: vs2013
 install:
   - cinst wget

@@ -25,11 +25,14 @@ function prebuildschemas()
 	local flatc = path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
         flatc = path.normalize(flatc)
         local out_dir = path.normalize(path.join("%{sln.location}", "schemas"))
-        local schemas = table.concat(os.matchfiles(path.join(_WORKING_DIR, "schemas", "*.fbs")), " ")
-        print(schemas)
-	prebuildcommands {
-                flatc .. " -o " .. out_dir .. " -c -n " .. schemas
-	}
+	local commands_list = {}
+	local fbs_files = os.matchfiles(path.join(_WORKING_DIR, "schemas", "*.fbs"))
+
+	for i, fbs in ipairs(fbs_files) do
+		local call = { flatc, "-c", "-n", "-o", out_dir, fbs }
+		table.insert(commands_list, table.concat(call, " "))
+	end
+	prebuildcommands(commands_list)
 end
 
 local target_outdir = path.join("build", "%{cfg.buildcfg}-%{cfg.architecture}")

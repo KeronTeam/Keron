@@ -33,7 +33,7 @@ private:
 
 struct library final {
 	library() { enet_initialize(); }
-	~library() noexcept { enet_deinitialize(); }
+	~library() { enet_deinitialize(); }
 };
 
 struct packet final {

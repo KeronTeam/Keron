@@ -156,3 +156,8 @@ solution "Keron"
 	files { "server/src/**.cpp" }
 	links { "flatbuffers-cpp", "enet-static" }
 	prebuildschemas()
+
+	filter "system:windows"
+	    removefiles { "server/src/os/posix.cpp" }
+	filter "system:linux or macosx"
+	    removefiles { "server/src/os/windows.cpp" }

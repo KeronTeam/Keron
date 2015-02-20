@@ -111,6 +111,9 @@ solution "Keron"
             "HAS_INET_PTON", "HAS_INET_NTOP",
             "HAS_MSGHDR_FLAGS", "HAS_SOCKLEN_T"
         }
+        filter "system:macosx"
+            removedefines {"HAS_GETHOSTBYNAME_R", "HAS_GETHOSTBYADDR_R"}
+
 
      project "enet-shared"
         kind "SharedLib"
@@ -130,7 +133,7 @@ solution "Keron"
                 targetprefix "lib"
                 links { "Winmm", "Ws2_32" }
         filter "system:macosx"
-                targetextension ".so"
+            removedefines {"HAS_GETHOSTBYNAME_R", "HAS_GETHOSTBYADDR_R"}
 
     project "ENet-net"
         kind "SharedLib"

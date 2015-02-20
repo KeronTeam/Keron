@@ -19,13 +19,13 @@ static BOOL handler(DWORD fdwCtrlType)
 		case CTRL_C_EVENT:
 		case CTRL_CLOSE_EVENT:
 			std::cout << "The server is going DOWN!" << std::endl;
-			stop = 1;
+			stop.store(1);
 			return TRUE;
 		case CTRL_BREAK_EVENT:
 		case CTRL_LOGOFF_EVENT:
 		case CTRL_SHUTDOWN_EVENT:
 			std::cout << "The server is going DOWN!" << std::endl;
-			stop = 1;
+			stop.store(1);
 			// Same return as the default case.
 		default:
 			return FALSE;

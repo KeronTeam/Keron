@@ -10,6 +10,7 @@
 #include <flatbuffers/idl.h>
 #include <flatbuffers/util.h>
 
+#include "libvedis.h"
 #include "libenet.h"
 #include "signal_handlers.h"
 
@@ -61,7 +62,7 @@ int main(void)
 	if (!flatbuffers::LoadFile(filename.c_str(), false, &configjson)) {
 		std::cerr << "No server configuration found. Creating a default one." << std::endl;
 		flatbuffers::FlatBufferBuilder fbb;
-		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8);
+		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8, fbb.CreateString("server.vdb"));
 		auto generator = flatbuffers::GeneratorOptions();
 		generator.strict_json = true;
 		FinishConfigurationBuffer(fbb, cfg);
@@ -80,6 +81,7 @@ int main(void)
 	parser.Parse(configjson.c_str());
 
 	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+        keron::db::store datastore(settings->datastore()->c_str());
 
 	std::vector<msg_handler> handlers(16);
 	handlers[keron::messages::NetID_NONE] = msg_none;
@@ -89,10 +91,8 @@ int main(void)
 	keron::net::library enet;
 	ENetAddress address;
 
-	if (strncmp(settings->address()->c_str(), "*", 1) == 0) {
-		std::cout << "any" << std::endl;
+	if (strncmp(settings->address()->c_str(), "*", 1) == 0)
 		address.host = ENET_HOST_ANY;
-	}
 	else
 		enet_address_set_host(&address, settings->address()->c_str());
 

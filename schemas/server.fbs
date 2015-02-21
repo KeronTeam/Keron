@@ -2,9 +2,14 @@
 namespace keron.server;
 
 table Configuration {
+    // Server address. "*" represents any address.
     address:string;
+    // Server port.
     port:ushort;
+    // Maximum number of clients.
     maxclients:uint;
+    // Path to the datastore.
+    datastore:string;
 }
 
 root_type Configuration;

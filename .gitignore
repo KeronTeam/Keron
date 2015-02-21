@@ -8,3 +8,4 @@
 *.sln
 build/
 server.json
+server.vdb

@@ -158,6 +158,7 @@ solution "Keron"
 	includedirs {
 		"server/include",
                 "enet/include",
+                "vedis",
 		"flatbuffers/include",
 		"%{sln.location}/schemas"
 	}

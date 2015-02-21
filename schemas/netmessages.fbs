@@ -2,7 +2,7 @@
 include "flightctrlstate.fbs";
 
 namespace keron.messages;
-union Type {
+union NetID {
   Chat,
   FlightCtrl
 }
@@ -17,7 +17,7 @@ table FlightCtrl {
 }
 
 table NetMessage {
-    message:Type;
+    message:NetID;
 }
 
 root_type NetMessage;

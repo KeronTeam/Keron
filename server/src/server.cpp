@@ -82,9 +82,9 @@ int main(void)
 	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
 
 	std::vector<msg_handler> handlers(16);
-	handlers[keron::messages::Type_NONE] = msg_none;
-	handlers[keron::messages::Type_Chat] = msg_chat;
-	handlers[keron::messages::Type_FlightCtrl] = msg_flightctrl;
+	handlers[keron::messages::NetID_NONE] = msg_none;
+	handlers[keron::messages::NetID_Chat] = msg_chat;
+	handlers[keron::messages::NetID_FlightCtrl] = msg_flightctrl;
 
 	keron::net::library enet;
 	ENetAddress address;
@@ -130,15 +130,15 @@ int main(void)
 					
 
 				auto message = keron::messages::GetNetMessage(packet.data());
-				keron::messages::Type type = message->message_type();
-				std::cout << "Message is: " << keron::messages::EnumNameType(type) << std::endl;
+				keron::messages::NetID id = message->message_type();
+				std::cout << "Message is: " << keron::messages::EnumNameNetID(id) << std::endl;
 
-				if (!(type < handlers.size())) {
+				if (!(id < handlers.size())) {
 					std::cout << "No available handlers.";
 					break;
 				}
 
-				handlers.at(type)(host, event, *message);
+				handlers.at(id)(host, event, *message);
 
 			}
 				break;

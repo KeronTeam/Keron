@@ -5,6 +5,7 @@
 #include <vector>
 #include <functional>
 #include <type_traits>
+#include <exception>
 
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/idl.h>
@@ -97,6 +98,7 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 		enet_address_set_host(&address, host.c_str());
 
 	address.port = port;
+	return address;
 }
 
 int main(void)

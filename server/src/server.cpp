@@ -41,25 +41,18 @@ void msg_flightctrl(keron::net::host &host, const keron::net::event &event, cons
 	std::cout << "Flight control state" << std::endl;
 }
 
-int main(void)
+void load_configuration(flatbuffers::Parser &parser, const std::string &schema, const std::string &configfile)
 {
-	int errcode = keron::server::register_signal_handlers();
-
-	if (errcode)
-		return errcode;
-
-	std::string filename("server.json");
 	std::string serverschema;
 	std::string configjson;
+        parser.builder_.Clear();
 
-	if (!flatbuffers::LoadFile("schemas/server.fbs", false, &serverschema)) {
-		std::cerr << "Cannot load server schema." << std::endl;
-		return -1;
-	}
+	if (!flatbuffers::LoadFile(schema.c_str(), false, &serverschema))
+                throw std::runtime_error("Cannot load server schema.");
 
-	flatbuffers::Parser parser;
 	parser.Parse(serverschema.c_str());
-	if (!flatbuffers::LoadFile(filename.c_str(), false, &configjson)) {
+
+	if (!flatbuffers::LoadFile(configfile.c_str(), false, &configjson)) {
 		std::cerr << "No server configuration found. Creating a default one." << std::endl;
 		flatbuffers::FlatBufferBuilder fbb;
 		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8, fbb.CreateString("server.vdb"));
@@ -68,38 +61,70 @@ int main(void)
 		FinishConfigurationBuffer(fbb, cfg);
 		flatbuffers::GenerateText(parser, fbb.GetBufferPointer(), generator, &configjson);
 
-		if (!flatbuffers::SaveFile(filename.c_str(), configjson.c_str(), configjson.size(), false)) {
-			std::cerr << "Unable to write default configuration!" << std::endl;
-			return -2;
-		}
+		if (!flatbuffers::SaveFile(configfile.c_str(), configjson.c_str(), configjson.size(), false))
+                        throw std::runtime_error("Unable to write default configuration!");
 
-		std::cerr << "A default configuration has been written.\n"
-			<< "Check the content of `server.json`, and restart the server." << std::endl;
-		return -4;
+                throw std::runtime_error(
+			"A default configuration has been written. "
+			"Check the content of `server.json`, and restart the server.");
 	}
 
 	parser.Parse(configjson.c_str());
+}
 
-	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
-        keron::db::store datastore(settings->datastore()->c_str());
+std::vector<msg_handler> initialize_messages_handlers()
+{
+	using namespace keron::messages;
 
-	std::vector<msg_handler> handlers(16);
-	handlers[keron::messages::NetID_NONE] = msg_none;
-	handlers[keron::messages::NetID_Chat] = msg_chat;
-	handlers[keron::messages::NetID_FlightCtrl] = msg_flightctrl;
+	std::vector<msg_handler> handlers(3);
+	handlers[NetID_NONE] = msg_none;
+	handlers[NetID_Chat] = msg_chat;
+	handlers[NetID_FlightCtrl] = msg_flightctrl;
 
-	keron::net::library enet;
+	return handlers;
+}
+
+ENetAddress initialize_server_address(const keron::server::Configuration &config)
+{
+	const std::string host(config.address()->c_str());
+	uint16_t port{config.port()};
+
 	ENetAddress address;
 
-	if (strncmp(settings->address()->c_str(), "*", 1) == 0)
+	if (host != "*")
 		address.host = ENET_HOST_ANY;
 	else
-		enet_address_set_host(&address, settings->address()->c_str());
+		enet_address_set_host(&address, host.c_str());
 
-	address.port = settings->port();
+	address.port = port;
+}
+
+int main(void)
+{
+	std::cout << "Registering signal handlers." << std::endl;
+	int errcode = keron::server::register_signal_handlers();
+
+	if (errcode)
+		return errcode;
+
+	std::cout << "Loading server configuration." << std::endl;
+        flatbuffers::Parser parser;
+        load_configuration(parser, "schemas/server.fbs", "server.json");
+
+        auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+
+	std::cout << "Firing up storage." << std::endl;
+        keron::db::store datastore(settings->datastore()->c_str());
+
+	std::cout << "Preparing message handlers." << std::endl;
+	std::vector<msg_handler> handlers = initialize_messages_handlers();
+
+
+	std::cout << "Initializing network." << std::endl;
+	keron::net::library enet;
+
+	auto address = initialize_server_address(*settings);
 	keron::net::host host(address, settings->maxclients(), 2);
-	std::cout << "address.host = " << address.host << ", port = " << address.port << std::endl;
-
 	if (!host) {
 		std::cerr << "ERROR: creating host." << std::endl;
 		return -3;

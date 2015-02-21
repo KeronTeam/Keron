@@ -92,7 +92,7 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 
 	ENetAddress address;
 
-	if (host != "*")
+	if (host == "*")
 		address.host = ENET_HOST_ANY;
 	else
 		enet_address_set_host(&address, host.c_str());
@@ -158,7 +158,7 @@ int main(void)
 
 				auto message = keron::messages::GetNetMessage(packet.data());
 				keron::messages::NetID id = message->message_type();
-				std::cout << "Message is: " << keron::messages::EnumNameNetID(id) << std::endl;
+				std::cout << "Message is: " << static_cast<int>(id) << " " << keron::messages::EnumNameNetID(id) << std::endl;
 
 				if (!(id < handlers.size())) {
 					std::cout << "No available handlers.";

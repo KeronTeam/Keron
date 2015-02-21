@@ -34,7 +34,11 @@ static BOOL handler(DWORD fdwCtrlType)
 
 int register_signal_handlers()
 {
-	return SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) == TRUE;
+        // We use posix-like retcode, 0 means success.
+	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE)
+		return GetLastError();
+
+	return 0;
 }
 
 } // namespace server

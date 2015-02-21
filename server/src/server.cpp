@@ -5,7 +5,7 @@
 #include <vector>
 #include <functional>
 #include <type_traits>
-#include <exception>
+#include <stdexcept>
 
 #include <flatbuffers/flatbuffers.h>
 #include <flatbuffers/idl.h>

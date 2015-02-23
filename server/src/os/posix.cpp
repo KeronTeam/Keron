@@ -1,10 +1,13 @@
 #include "signal_handlers.h"
 
+#include <cstring>
+#include <cerrno>
+
 #include <iostream>
+#include <system_error>
 
 #include <unistd.h>
 #include <signal.h>
-#include <cstring>
 
 
 namespace keron {
@@ -17,24 +20,19 @@ static void shutdown(int, siginfo_t *, void *)
 	stop = 1;
 }
 
-int register_signal_handlers()
+void register_signal_handlers()
 {
 	struct sigaction action;
 	memset(&action, 0, sizeof(action));
 	action.sa_sigaction = &shutdown;
 	action.sa_flags = SA_SIGINFO;
 
-	if (sigaction(SIGTERM, &action, nullptr) < 0) {
-		perror("Cannot register TERM signal handler.");
-		return -1;
+	for (const auto sig: { SIGTERM, SIGINT }) {
+		if (sigaction(sig, &action, nullptr) < 0) {
+			auto errcode = errno;
+			throw std::system_error({errcode, std::system_category()}, "Cannot register signal handler");
+		}
 	}
-
-	if (sigaction(SIGINT, &action, nullptr) < 0) {
-		perror("Cannot register INT signal handler.");
-		return -2;
-	}
-
-	return 0;
 }
 
 } // namespace server

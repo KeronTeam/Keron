@@ -104,23 +104,19 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 int main(void)
 {
 	std::cout << "Registering signal handlers." << std::endl;
-	int errcode = keron::server::register_signal_handlers();
-
-	if (errcode)
-		return errcode;
+	keron::server::register_signal_handlers();
 
 	std::cout << "Loading server configuration." << std::endl;
-        flatbuffers::Parser parser;
-        load_configuration(parser, "schemas/server.fbs", "server.json");
+	flatbuffers::Parser parser;
+	load_configuration(parser, "schemas/server.fbs", "server.json");
 
-        auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
 
 	std::cout << "Firing up storage." << std::endl;
-        keron::db::store datastore(settings->datastore()->c_str());
+	keron::db::store datastore(settings->datastore()->c_str());
 
 	std::cout << "Preparing message handlers." << std::endl;
 	std::vector<msg_handler> handlers = initialize_messages_handlers();
-
 
 	std::cout << "Initializing network." << std::endl;
 	keron::net::library enet;

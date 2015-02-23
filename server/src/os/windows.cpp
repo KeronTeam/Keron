@@ -32,13 +32,13 @@ static BOOL handler(DWORD fdwCtrlType)
 	}
 }
 
-int register_signal_handlers()
+void register_signal_handlers()
 {
         // We use posix-like retcode, 0 means success.
-	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE)
-		return GetLastError();
-
-	return 0;
+	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE) {
+		auto errcode = GetLastError();
+		throw std::system_error({errcode, std::system_category()}, "Cannot register signal handler");
+	}
 }
 
 } // namespace server

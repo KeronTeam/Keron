@@ -92,7 +92,7 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 
 	ENetAddress address;
 
-	if (host != "*")
+	if (host == "*")
 		address.host = ENET_HOST_ANY;
 	else
 		enet_address_set_host(&address, host.c_str());

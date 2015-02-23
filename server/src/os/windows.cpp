@@ -37,7 +37,7 @@ void register_signal_handlers()
 {
         // We use posix-like retcode, 0 means success.
 	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE) {
-		auto errcode = GetLastError();
+		auto errcode = static_cast<int>(GetLastError());
 		throw std::system_error({errcode, std::system_category()}, "Cannot register signal handler");
 	}
 }

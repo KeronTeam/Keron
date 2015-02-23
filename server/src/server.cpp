@@ -56,7 +56,9 @@ void load_configuration(flatbuffers::Parser &parser, const std::string &schema, 
 	if (!flatbuffers::LoadFile(configfile.c_str(), false, &configjson)) {
 		std::cerr << "No server configuration found. Creating a default one." << std::endl;
 		flatbuffers::FlatBufferBuilder fbb;
-		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8, fbb.CreateString("server.vdb"));
+		auto cfg = keron::server::CreateConfiguration(fbb,
+				fbb.CreateString("*"),
+				('K' << 8) | ('S' << 4) | 'P', 8, fbb.CreateString("server.vdb"));
 		auto generator = flatbuffers::GeneratorOptions();
 		generator.strict_json = true;
 		FinishConfigurationBuffer(fbb, cfg);

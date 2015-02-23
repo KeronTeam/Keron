@@ -3,6 +3,7 @@
 #include <cstring>
 
 #include <iostream>
+#include <system_error>
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>

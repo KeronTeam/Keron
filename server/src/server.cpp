@@ -56,7 +56,9 @@ void load_configuration(flatbuffers::Parser &parser, const std::string &schema, 
 	if (!flatbuffers::LoadFile(configfile.c_str(), false, &configjson)) {
 		std::cerr << "No server configuration found. Creating a default one." << std::endl;
 		flatbuffers::FlatBufferBuilder fbb;
-		auto cfg = keron::server::CreateConfiguration(fbb, fbb.CreateString("*"), 18246, 8, fbb.CreateString("server.vdb"));
+		auto cfg = keron::server::CreateConfiguration(fbb,
+				fbb.CreateString("*"),
+				('K' << 8) | ('S' << 4) | 'P', 8, fbb.CreateString("server.vdb"));
 		auto generator = flatbuffers::GeneratorOptions();
 		generator.strict_json = true;
 		FinishConfigurationBuffer(fbb, cfg);
@@ -104,23 +106,19 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 int main(void)
 {
 	std::cout << "Registering signal handlers." << std::endl;
-	int errcode = keron::server::register_signal_handlers();
-
-	if (errcode)
-		return errcode;
+	keron::server::register_signal_handlers();
 
 	std::cout << "Loading server configuration." << std::endl;
-        flatbuffers::Parser parser;
-        load_configuration(parser, "schemas/server.fbs", "server.json");
+	flatbuffers::Parser parser;
+	load_configuration(parser, "schemas/server.fbs", "server.json");
 
-        auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
 
 	std::cout << "Firing up storage." << std::endl;
-        keron::db::store datastore(settings->datastore()->c_str());
+	keron::db::store datastore(settings->datastore()->c_str());
 
 	std::cout << "Preparing message handlers." << std::endl;
 	std::vector<msg_handler> handlers = initialize_messages_handlers();
-
 
 	std::cout << "Initializing network." << std::endl;
 	keron::net::library enet;

@@ -3,6 +3,7 @@
 #include <cstring>
 
 #include <iostream>
+#include <system_error>
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
@@ -32,13 +33,13 @@ static BOOL handler(DWORD fdwCtrlType)
 	}
 }
 
-int register_signal_handlers()
+void register_signal_handlers()
 {
         // We use posix-like retcode, 0 means success.
-	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE)
-		return GetLastError();
-
-	return 0;
+	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE) {
+		auto errcode = static_cast<int>(GetLastError());
+		throw std::system_error({errcode, std::system_category()}, "Cannot register signal handler");
+	}
 }
 
 } // namespace server

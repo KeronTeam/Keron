@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Keron by KeronTeam</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Keron</h1>
+        <h2>Kerbal Online - Multiplayer KSP Mod.</h2>
+        <a href="https://github.com/KeronTeam/Keron" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="keron" class="anchor" href="#keron" aria-hidden="true"><span class="octicon octicon-link"></span></a>Keron</h1>
+
+<p><strong>Ker</strong>bal <strong>On</strong>line.</p>
+
+<p>Enabling you to play with friends (and foes?).</p>
+
+<p>Heavy inspiration from and credits to <a href="https://github.com/TehGimp/KerbalMultiPlayer">KMP</a>.</p>
+
+<p>If you are looking for a (somewhat) working product, please head over to <a href="https://github.com/godarklight/DarkMultiPlayer">DarkMultiPlayer</a>.</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li>
+<a href="http://enet.bespin.org/">ENet</a>: Network library.</li>
+<li>
+<a href="https://github.com/KeronTeam/enetcs">ENetCS</a>: ENet for C# bindings (client-side).</li>
+<li>
+<a href="https://github.com/google/flatbuffers">FlatBuffers</a>: Serialization library.</li>
+<li>
+<a href="https://github.com/symisc/vedis">Vedis</a>: redis-like embedded datastore (server-side).</li>
+</ul>
+
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>The project dependencies are rather small and self-sufficient.
+Therefore, we use <a href="http://www.git-scm.com/book/en/v2/Git-Tools-Submodules">submodules</a> to guarantee
+that we share the same version across all builds.</p>
+
+<p>Get the submodules:</p>
+
+<div class="highlight highlight-sh"><pre>git submodule init
+git submodule update</pre></div>
+
+<p>Get a copy of <a href="http://premake.bitbucket.org/download.html#v5">Premake 5</a>, and make it available in your PATH.
+Then run premake with your flavor of arguments:</p>
+
+<div class="highlight highlight-sh"><pre><span class="pl-c"># Linux build</span>
+premake5 --cc=clang gmake
+
+<span class="pl-c"># Windows build</span>
+premake5 vs2013</pre></div>
+
+<p>Your solution/Makefile files will be in the <code>build/</code> directory.</p>
+
+<h2>
+<a id="design" class="anchor" href="#design" aria-hidden="true"><span class="octicon octicon-link"></span></a>Design</h2>
+
+<p><strong>THIS SECTION IS OUT OF DATE</strong>. See the issues for details.</p>
+
+<p>The server runs in non-authoritative fashion:
+clients send updates and they are broadcasted to everybody through the server.</p>
+
+<h3>
+<a id="ksc" class="anchor" href="#ksc" aria-hidden="true"><span class="octicon octicon-link"></span></a>KSC</h3>
+
+<p><strong>THIS SECTION IS OUT OF DATE</strong>. See the issues for details.</p>
+
+<p>The KSC launchpad and runway are viewed as shared resources: one player is allowed at a given time.</p>
+
+<p>Two cylindrical corridors are defined for each shared resource. As long as there is something in the corridor
+(an active player, a debris, a plane, a bird, superman...), a player cannot claim the resource.</p>
+
+<p>For the launchpad, it would be a corridor 100m wide and 10km tall (note: subject to change).
+For the runway, it would be 100m tall and 500m wide before and after the track.</p>
+
+<p>Example:</p>
+
+<ul>
+<li>Alice requests a launch. The corridor is clear, he acquires it and proceed to his launch.</li>
+<li>Bob sees that Alice has reached the 10k limit. He requests a launch, but there are unlanded debris: he must wait.</li>
+<li>After a time, Bob requests the corridor. All debris are landed, the 10k corridor is clear,
+but there are debris on the launchpad (such as <a href="http://wiki.kerbalspaceprogram.com/wiki/TT18-A_Launch_Stability_Enhancer">TT18-A LSE</a>s).
+He can clear it using the standard <em>Clear Launchpad</em> button.</li>
+</ul>
+
+<p>If a player disconnects while in a corridor, its vessel shall be destroyed immediately.</p>
+
+<h3>
+<a id="warp" class="anchor" href="#warp" aria-hidden="true"><span class="octicon octicon-link"></span></a>Warp</h3>
+
+<p><strong>THIS SECTION IS OUT OF DATE</strong>. See the issues for details.</p>
+
+<p>Warping handling is probably <em>the</em> most challenging issue of networked KSP.
+Disabling it all together is not a valid option (who would spend <em>months</em> to get to Eve,
+or simply <em>hours</em> to get to the Mun?).</p>
+
+<p>Same goes with a shared warp-time</p>
+
+<p>Imagine:</p>
+
+<blockquote>
+<p>Got to go to Eve. warping x1000. Sorry folks who were doing high-precision docking manoeuvers!</p>
+</blockquote>
+
+<p>Or even:</p>
+
+<blockquote>
+<p>Got to re-entry. I take the lock on the time. Sorry folks who'd like to go to Eve before retirement!</p>
+</blockquote>
+
+<p>Those are simply unacceptable from a gameplay perspective.</p>
+
+<p>The answer to this is simple: subspaces. Each player plays in his own timeline, and may catch up with the server.
+The server time is simply the highest available.</p>
+
+<p>This system implies a very simple, very important rule: <em>one cannot interact with a vessel's past or future.</em> <strong>Ever.</strong></p>
+
+<p>Reason is that you weren't there at that time.
+So you shouldn't interfere with the vessel if you have not caught up with it.
+It's completely unlogical from a realistic perspective but we believe it to be to the gameplay's profits.
+And we would not have to deal with alternatives futures, which would be a mess.</p>
+
+<p>Moreover a player may never go back in his own timeline (just trust the Time Lords on this).</p>
+
+<p>This together means:</p>
+
+<ul>
+<li>
+<strong>Late</strong> players would see a <em>replay</em> of future ships, as well as their trajectories.</li>
+<li>
+<strong>Current</strong> players would see past ship with a <em>predicted trajectories</em>, which may change at any time.</li>
+</ul>
+
+<blockquote>
+<p>But what happens if a past ship is on collision course with a future ship?</p>
+</blockquote>
+
+<p>Well, that's tricky. Let me put that simply: <strong>they will collide at the point and time they should collide.</strong>.</p>
+
+<p>Multiplayer KSP is no fairy tale.</p>
+
+<h2>
+<a id="technicalities" class="anchor" href="#technicalities" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technicalities</h2>
+
+<p><strong>THIS SECTION IS OUT OF DATE</strong>. See the issues for details.</p>
+
+<p>The client is a standard KSP Plugin. Though it originally intended to leverage Unity Networking functionalities, this turned out a dead end (basically, client would have to maintain deep copies of watched objects for the network serializer to kick in).</p>
+
+<p>Instead, we use <a href="http://code.google.com/p/lidgren-network-gen3/">Lidgren.Net</a>.</p>
+
+<p>Both the client and the server are written in C# and relies on:</p>
+
+<ul>
+<li>KSP (duh).</li>
+<li><a href="http://code.google.com/p/lidgren-network-gen3/">Lidgren.Net</a></li>
+<li>
+<a href="https://zlibnet.codeplex.com/">ZLibNet</a> and <a href="http://zlib.net/">ZLib</a> (used for compressing <em>large</em> datasets)</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/KeronTeam/Keron/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/KeronTeam/Keron/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/KeronTeam/Keron"></a> is maintained by <a href="https://github.com/KeronTeam">KeronTeam</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

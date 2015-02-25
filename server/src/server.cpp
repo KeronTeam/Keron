@@ -1,6 +1,7 @@
 #include <cstring>
 
 #include <iostream>
+#include <chrono>
 #include <atomic>
 #include <vector>
 #include <functional>
@@ -42,6 +43,28 @@ void msg_flightctrl(keron::net::host &host, const keron::net::event &event, cons
 	std::cout << "Flight control state" << std::endl;
 }
 
+void msg_clocksync(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &msg)
+{
+	using keron::messages::CreateNetMessage;
+	using keron::messages::NetID_ClockSync;
+	using keron::messages::CreateClockSync;
+	using keron::messages::FinishNetMessageBuffer;
+
+	auto clocksync = reinterpret_cast<const keron::messages::ClockSync *>(msg.message());
+	auto now = std::chrono::system_clock::now().time_since_epoch();
+	auto server_ts = std::chrono::duration_cast<std::chrono::seconds>(now).count();
+	auto client_ts = clocksync->clientTransmission();
+
+	flatbuffers::FlatBufferBuilder fbb;
+	auto replysync = CreateNetMessage(fbb, NetID_ClockSync, CreateClockSync(fbb, client_ts, server_ts).Union());
+
+	FinishNetMessageBuffer(fbb, replysync);
+
+	std::cout << "Client TS:" << client_ts << ". Server TS: " << server_ts << std::endl;
+	keron::net::packet response(fbb.GetBufferPointer(), fbb.GetSize(), event.packet->flags);
+	enet_peer_send(event.peer, event.channelID, response.release());
+}
+
 void load_configuration(flatbuffers::Parser &parser, const std::string &schema, const std::string &configfile)
 {
 	std::string serverschema;
@@ -79,10 +102,11 @@ std::vector<msg_handler> initialize_messages_handlers()
 {
 	using namespace keron::messages;
 
-	std::vector<msg_handler> handlers(3);
+	std::vector<msg_handler> handlers(NetID_MAXNETID);
 	handlers[NetID_NONE] = msg_none;
 	handlers[NetID_Chat] = msg_chat;
 	handlers[NetID_FlightCtrl] = msg_flightctrl;
+	handlers[NetID_ClockSync] = msg_clocksync;
 
 	return handlers;
 }

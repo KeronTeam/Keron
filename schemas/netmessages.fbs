@@ -4,7 +4,10 @@ include "flightctrlstate.fbs";
 namespace keron.messages;
 union NetID {
   Chat,
-  FlightCtrl
+  FlightCtrl,
+  ClockSync,
+  /// Should always be last. Maximum number of items.
+  MAXNETID 
 }
 
 table Chat  {
@@ -15,6 +18,16 @@ table Chat  {
 table FlightCtrl {
     state: FlightCtrlState;
 }
+
+// Each field represents a timestamp.
+// Use the same underlying type as KSP Planetarium.GetUniversalTime()
+table ClockSync {
+    clientTransmission:double;
+    serverReception:double;
+}
+
+// Never used!
+table MAXNETID {}
 
 table NetMessage {
     message:NetID;

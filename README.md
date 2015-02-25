@@ -9,6 +9,9 @@ Heavy inspiration from and credits to [KMP](https://github.com/TehGimp/KerbalMul
 
 If you are looking for a (somewhat) working product, please head over to [DarkMultiPlayer](https://github.com/godarklight/DarkMultiPlayer).
 
+
+See `CHANGELOG.md` for the list of comprehensive changes.
+
 Dependencies
 ------------
 

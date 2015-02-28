@@ -1,30 +1,31 @@
 language: cpp
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y build-essential clang wget unzip mono-devel mono-mcs
+- sudo apt-get update -qq
+- sudo apt-get install -y build-essential clang wget unzip mono-devel mono-mcs
 before_script:
-  - wget -O /tmp/premake-dev-linux.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-linux.zip
-  - ls -l /tmp/premake-dev-linux.zip
-  - file /tmp/premake-dev-linux.zip
-  - unzip /tmp/premake-dev-linux.zip
-  - export PATH=$PATH:$PWD/bin/release
+- wget -O /tmp/premake-dev-linux.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-linux.zip
+- ls -l /tmp/premake-dev-linux.zip
+- file /tmp/premake-dev-linux.zip
+- unzip /tmp/premake-dev-linux.zip
+- export PATH=$PATH:$PWD/bin/release
 script:
-  - premake5 --cc=clang --arch=x64 gmake
-  # Circumvent https://bitbucket.org/premake/premake-dev/issue/258/response-file-doesnt-work-on-linux
-  - sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
-  - CC=clang CXX=clang++ make -C build/ verbose=1
-
+- premake5 --cc=clang --arch=x64 gmake
+- sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
+- CC=clang CXX=clang++ make -C build/ verbose=1
 before_deploy:
-  - cd build/
-  - tar cjf keron-linux-x64.tar.bz2 Release-x64/
-  - tar tjf keron-linux-x64.tar.bz2
-  - cd ../..
+- cd build/
+- tar cjf keron-linux-x64.tar.bz2 Release-x64/
+- tar tjf keron-linux-x64.tar.bz2
+- cd ../..
 deploy:
   provider: releases
   api_key:
-    secure: "d5YxaCCh3t+CpjVu2oxtA81ASJS5bxynu2omJBiyWwsdaPOaGCOR2bBg4IcBr3Tv/fnAeOHMUHjK1gDhxaF1UHGksjdoauh8McyQ8hHKe4gbFrDntz6HhzKsoV3u7QO918NL3P/DytS3KmjV+DwGe4pCVHJZvYdv30E4kq/tmJI="
-  file: "$TRAVIS_BUILD_DIR/build/keron-linux-x64.tar.bz2"
+    secure: d5YxaCCh3t+CpjVu2oxtA81ASJS5bxynu2omJBiyWwsdaPOaGCOR2bBg4IcBr3Tv/fnAeOHMUHjK1gDhxaF1UHGksjdoauh8McyQ8hHKe4gbFrDntz6HhzKsoV3u7QO918NL3P/DytS3KmjV+DwGe4pCVHJZvYdv30E4kq/tmJI=
+  file: $TRAVIS_BUILD_DIR/build/keron-linux-x64.tar.bz2
   draft: true
   skip_cleanup: true
   on:
     tags: true
+notifications:
+  slack:
+    secure: OVyz153fy75n5JFDesZTIUja2dAQh8pEcI1SUc5ppgaUoTCtYx04Oc60kUkm6AbDWfCLB6Z0jOXiLzMVJBgscwEnZRB7saMfA5iBJ5DpZODLJXI+s1VkHcGGIINEVLpB6/vnBZM80biDx7SlF3AC9TwJQCZNZUHE9AUfZAOkIyA=

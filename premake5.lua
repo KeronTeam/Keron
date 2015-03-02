@@ -9,6 +9,11 @@ newoption {
     }
 }
 
+newoption {
+    trigger = "ksp",
+    description = "Path to your KSP installation."
+}
+
 if not _OPTIONS["arch"] then
     if os.is64bit() then
         _OPTIONS["arch"] = "x64"
@@ -19,6 +24,19 @@ end
 
 if _OPTIONS["arch"] == "x86" then
     _OPTIONS["arch"] = "x32"
+end
+
+if not _OPTIONS["ksp"] then
+    print "ksp directory is **NOT** set. Using system libraries."
+end
+
+function ksp_assembly(name)
+    if not _OPTIONS["ksp"] then
+        return name
+    end
+
+    local managed = path.join(_OPTIONS["ksp"], "KSP_Data", "Managed")
+    return path.join(managed, name)
 end
 
 function prebuildschemas()
@@ -143,12 +161,15 @@ solution "Keron"
     project "ENet-net"
         kind "SharedLib"
         language "C#"
-        framework "3.5"
+        framework "2.0"
         targetname "ENet"
         targetdir(lib_outdir)
         files { "enetcs/ENetCS/**.cs" }
+        if _OPTIONS["ksp"] then
+            buildoptions { "/nostdlib" }
+        end
         flags { "Unsafe" }
-        links { "System" }
+        links({ ksp_assembly "System.dll", ksp_assembly "mscorlib.dll" })
 
     project "server"
         kind "ConsoleApp"

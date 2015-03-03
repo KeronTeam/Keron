@@ -36,6 +36,8 @@ function ksp_assembly(name)
     end
 
     local managed = path.join(_OPTIONS["ksp"], "KSP_Data", "Managed")
+    filter "system:macosx"
+        managed = path.join(_OPTIONS["ksp"], "KSP.app", "Contents", "Data", "Managed")
     return path.join(managed, name)
 end
 
@@ -197,3 +199,22 @@ solution "Keron"
 	    links { "Winmm", "Ws2_32" }
 	filter "system:linux or macosx"
 	    removefiles { "server/src/os/windows.cpp" }
+
+    project "client"
+        kind "SharedLib"
+        language "C#"
+        framework "4.5"
+        targetname "KeronClient"
+        targetdir(lib_outdir)
+        files { "client/**.cs" }
+        flags { "Unsafe" }
+        links { "ENet-net",
+                "flatbuffers-net", 
+                ksp_assembly "UnityEngine.dll",
+                ksp_assembly "Assembly-CSharp.dll",
+                ksp_assembly "System.dll" }
+                postbuildcommands {
+                    "{MKDIR} " .. path.join(_WORKING_DIR, target_outdir, "initSave"),
+                    "{COPY} " .. path.join(_WORKING_DIR, "client", "initSave", "*.sfs") .. " " .. path.join(_WORKING_DIR, target_outdir, "initSave")
+                }
+

@@ -6,6 +6,10 @@
 *.csproj
 *.unityproj
 *.sln
+*.userprefs
+# Mac OS X
+.DS_Store
 build/
+client/bin/
 server.json
 server.vdb

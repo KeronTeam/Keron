@@ -20,6 +20,7 @@ notifications:
     channel: general
 install:
   - cinst wget
+  - cinst devbox-sed
   - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .
@@ -32,6 +33,7 @@ before_build:
   - premake5.exe --arch=%PLATFORM% --ksp=KSP_runtime %VS_VERSION%
   - dir
   - dir build
+  - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" ENet-net.csproj
   - tree
 build:
   project: build\Keron.sln

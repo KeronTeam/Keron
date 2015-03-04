@@ -7,12 +7,14 @@ before_script:
 - wget -O /tmp/premake-dev-linux.tar.gz http://garr.dl.sourceforge.net/project/premake/5.0/premake-5.0-alpha1-linux.tar.gz
 - ls -l /tmp/premake-dev-linux.tar.gz
 - file /tmp/premake-dev-linux.tar.gz
-- cd bin 
+- cd bin
 - tar xzf /tmp/premake-dev-linux.tar.gz
 - cd ..
 - export PATH=$PATH:$PWD/bin
+- wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z "$KSP_RUNTIME_URL"
+- 7z x -p"$ARCHIVE_PWD" /tmp/ksp-runtime-linux.7z
 script:
-- premake5 --cc=clang --arch=x64 gmake
+- premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
 - sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
 - CC=clang CXX=clang++ make -C build/ verbose=1
 before_deploy:
@@ -32,3 +34,5 @@ deploy:
 notifications:
   slack:
     secure: OVyz153fy75n5JFDesZTIUja2dAQh8pEcI1SUc5ppgaUoTCtYx04Oc60kUkm6AbDWfCLB6Z0jOXiLzMVJBgscwEnZRB7saMfA5iBJ5DpZODLJXI+s1VkHcGGIINEVLpB6/vnBZM80biDx7SlF3AC9TwJQCZNZUHE9AUfZAOkIyA=
+env:
+  secure: a/76omx5jYf2p2NKrE4CDQk9kk85+lk3+50s8d2Qxc70DTWGMb6HYBCGfwOyxkvkzqHhnvqVNy2Xroyky0Mqv9DXOTWsK19yZp0wGZz/wkGsAameL9y55DpuMeUVxNE4VGb8M1owbFrjgA710gouydI9BbBsQjP5iFgeS0E6emI=

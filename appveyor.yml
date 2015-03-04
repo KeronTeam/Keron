@@ -23,7 +23,7 @@ install:
   - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .
-  - wget -nv -O ksp-runtime.7z https://code.enquat.re/mirror/ksp-runtime-win.7z
+  - wget --no-check-certificate -nv -O ksp-runtime.7z https://code.enquat.re/mirror/ksp-runtime-win.7z
   - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
   - git submodule init

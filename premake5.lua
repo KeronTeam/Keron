@@ -218,11 +218,18 @@ solution "Keron"
         targetdir(lib_outdir)
         files { "client/**.cs" }
         flags { "Unsafe" }
-        links { "ENet-net",
-                "flatbuffers-net", 
-                ksp_assembly "UnityEngine.dll",
-                ksp_assembly "Assembly-CSharp.dll",
-                ksp_assembly "System.dll" }
+        filter "system:not macosx"
+            links({ "ENet-net",
+                    "flatbuffers-net", 
+                    ksp_assembly "UnityEngine.dll",
+                    ksp_assembly "Assembly-CSharp.dll",
+                    ksp_assembly "System.dll" })
+        filter "system:macosx"
+            links({ "ENet-net",
+                    "flatbuffers-net", 
+                    ksp_bundle "UnityEngine.dll",
+                    ksp_bundle "Assembly-CSharp.dll",
+                    ksp_bundle "System.dll" })
                 postbuildcommands {
                     "{MKDIR} " .. path.join(_WORKING_DIR, target_outdir, "initSave"),
                     "{COPY} " .. path.join(_WORKING_DIR, "client", "initSave", "*.sfs") .. " " .. path.join(_WORKING_DIR, target_outdir, "initSave")

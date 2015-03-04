@@ -170,7 +170,6 @@ solution "Keron"
     project "ENet-net"
         kind "SharedLib"
         language "C#"
-        framework "2.0"
         targetname "ENet"
         targetdir(lib_outdir)
         files { "enetcs/ENetCS/**.cs" }

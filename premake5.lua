@@ -176,7 +176,6 @@ solution "Keron"
         if _OPTIONS["ksp"] then
             buildoptions { "/nostdlib" }
         end
-        flags { "NoImplicitLink", "OmitDefaultLibrary" }
         clr "Unsafe"
         filter "system:not macosx"
 	    links({ ksp_assembly "System.dll", ksp_assembly "System.Core.dll", ksp_assembly "mscorlib.dll" })

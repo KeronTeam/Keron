@@ -11,7 +11,7 @@ before_script:
 - tar xzf /tmp/premake-dev-linux.tar.gz
 - cd ..
 - export PATH=$PATH:$PWD/bin
-- wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z "$KSP_RUNTIME_URL"
+- wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z https://code.enquat.re/mirror/ksp-runtime-linux.7z
 - 7z x -p"$ARCHIVE_PWD" /tmp/ksp-runtime-linux.7z
 script:
 - premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
@@ -35,4 +35,4 @@ notifications:
   slack:
     secure: OVyz153fy75n5JFDesZTIUja2dAQh8pEcI1SUc5ppgaUoTCtYx04Oc60kUkm6AbDWfCLB6Z0jOXiLzMVJBgscwEnZRB7saMfA5iBJ5DpZODLJXI+s1VkHcGGIINEVLpB6/vnBZM80biDx7SlF3AC9TwJQCZNZUHE9AUfZAOkIyA=
 env:
-  secure: a/76omx5jYf2p2NKrE4CDQk9kk85+lk3+50s8d2Qxc70DTWGMb6HYBCGfwOyxkvkzqHhnvqVNy2Xroyky0Mqv9DXOTWsK19yZp0wGZz/wkGsAameL9y55DpuMeUVxNE4VGb8M1owbFrjgA710gouydI9BbBsQjP5iFgeS0E6emI=
+  secure: dvG9x0Jdf3+mpKBF9RJz5lLh/ONCqwPkRqMy4poF+aMWJFpAUAgY2GMoWmfDzNOomCqjj5F8DsE0jma8tUH1Yt63Fo0hPTLrfftGRUoFOnJwB9bPChsGt+v+dB0XfeU1TYMZrEmzsJihQtS2KFKCAXsn53ceQpLDoOgYn4ADbts=

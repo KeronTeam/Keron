@@ -177,6 +177,7 @@ solution "Keron"
         if _OPTIONS["ksp"] then
             buildoptions { "/nostdlib" }
         end
+        flags { "NoCopyLocal" }
         clr "Unsafe"
         filter "system:not macosx"
 	    links({ ksp_assembly "System.dll", ksp_assembly "System.Core.dll", ksp_assembly "mscorlib.dll" })
@@ -213,11 +214,11 @@ solution "Keron"
     project "client"
         kind "SharedLib"
         language "C#"
-        framework "4.5"
+        framework "2.0"
         targetname "KeronClient"
         targetdir(lib_outdir)
         files { "client/**.cs" }
-        flags { "Unsafe" }
+        flags { "Unsafe", "NoCopyLocal" }
         links { "ENet-net",
                 "flatbuffers-net", 
                 ksp_assembly "UnityEngine.dll",

@@ -13,7 +13,7 @@ before_script:
 - export PATH=$PATH:$PWD/bin
 - wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z https://code.enquat.re/mirror/ksp-runtime-linux.7z
 - 7z -h
-- 7z x -p"$(echo $ARCHIVE_PWD)" /tmp/ksp-runtime-linux.7z
+- 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
 script:
 - premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
 - sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
@@ -36,4 +36,4 @@ notifications:
   slack:
     secure: OVyz153fy75n5JFDesZTIUja2dAQh8pEcI1SUc5ppgaUoTCtYx04Oc60kUkm6AbDWfCLB6Z0jOXiLzMVJBgscwEnZRB7saMfA5iBJ5DpZODLJXI+s1VkHcGGIINEVLpB6/vnBZM80biDx7SlF3AC9TwJQCZNZUHE9AUfZAOkIyA=
 env:
-  secure: ZqOShR6Yp50lOLUO7yWWYpMrNXXFVFfpkMVb3ZYfdzsYPEKg4t0zSLwEAF8vMZsCWJ3X6Q505VoyRNwOMWl73+9fy9fTEtN/UH2APsrwVAdyaK0KgUn+Cf+/NL44jWOBSX5SA+r94e3H4y+JXyCQgkWPNrYLU2XyjZFn7gH4Q7Y=
+  secure: MQJgRKOUAM0S6bY1GN/IdtJNjsAUx0X4/kh/X5NilXbRuhK5CT8l/m/jBaXfhUFjlHy3U+nI15pmu928I2aC+AWzPogMYfw0ACKhaED30koT4e9MyrRv1ZUipAMWZKB/BeMDKBo2QlyEn0cwx6XUPUTYzeu5jSwNmRpsL5sDeYQ=

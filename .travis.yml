@@ -12,7 +12,8 @@ before_script:
 - cd ..
 - export PATH=$PATH:$PWD/bin
 - wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z https://code.enquat.re/mirror/ksp-runtime-linux.7z
-- 7z x -p"$ARCHIVE_PWD" /tmp/ksp-runtime-linux.7z
+- 7z -h
+- 7z x -p'$ARCHIVE_PWD' /tmp/ksp-runtime-linux.7z
 script:
 - premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
 - sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make

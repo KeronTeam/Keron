@@ -1,13 +1,16 @@
 language: cpp
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -y build-essential clang wget unzip mono-devel mono-mcs
+- sudo apt-get install -y build-essential clang wget p7zip-full mono-devel mono-mcs
 before_script:
-- wget -O /tmp/premake-dev-linux.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-linux.zip
-- ls -l /tmp/premake-dev-linux.zip
-- file /tmp/premake-dev-linux.zip
-- unzip /tmp/premake-dev-linux.zip
-- export PATH=$PATH:$PWD/bin/release
+- mkdir bin
+- wget -O /tmp/premake-dev-linux.tar.gz http://garr.dl.sourceforge.net/project/premake/5.0/premake-5.0-alpha1-linux.tar.gz
+- ls -l /tmp/premake-dev-linux.tar.gz
+- file /tmp/premake-dev-linux.tar.gz
+- cd bin 
+- tar xzf /tmp/premake-dev-linux.tar.gz
+- cd ..
+- export PATH=$PATH:$PWD/bin
 script:
 - premake5 --cc=clang --arch=x64 gmake
 - sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make

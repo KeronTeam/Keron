@@ -33,7 +33,7 @@ before_build:
   - premake5.exe --arch=%PLATFORM% --ksp=KSP_runtime %VS_VERSION%
   - dir
   - dir build
-  - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" ENet-net.csproj
+  - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" build\ENet-net.csproj
   - tree
 build:
   project: build\Keron.sln

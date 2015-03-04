@@ -179,9 +179,9 @@ solution "Keron"
         flags { "NoImplicitLink", "OmitDefaultLibrary" }
         clr "Unsafe"
         filter "system:not macosx"
-	    links({ ksp_assembly "System.dll", ksp_assembly "mscorlib.dll" })
+	    links({ ksp_assembly "System.dll", ksp_assembly "System.Core.dll", ksp_assembly "mscorlib.dll" })
         filter "system:macosx"
-	    links({ ksp_bundle "System.dll", ksp_bundle "mscorlib.dll" })
+	    links({ ksp_bundle "System.dll", ksp_bundle "System.Core.dll", ksp_bundle "mscorlib.dll" })
 
     project "server"
         kind "ConsoleApp"

@@ -9,6 +9,8 @@ platform:
   - x86
   - x64
 environment:
+  archive_pwd:
+    secure: /dBxnu4DmsDVzbqPnYSnLGrPZRrrj9w2BNGhxjHaPzTYD1FNs71/h791kE0drs/P
   matrix:
   - VS_VERSION: vs2013
 notifications:
@@ -21,11 +23,13 @@ install:
   - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .
+  - wget -nv -O ksp-runtime.7z https://code.enquat.re/mirror/ksp-runtime-win.7z
+  - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
   - git submodule init
   - git submodule update
   - del /F /S build
-  - premake5.exe --arch=%PLATFORM% %VS_VERSION%
+  - premake5.exe --arch=%PLATFORM% --ksp=KSP_runtime %VS_VERSION%
   - dir
   - dir build
   - tree

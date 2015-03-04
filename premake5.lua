@@ -34,10 +34,17 @@ function ksp_assembly(name)
     if not _OPTIONS["ksp"] then
         return name
     end
-
     local managed = path.join(_OPTIONS["ksp"], "KSP_Data", "Managed")
-    filter "system:macosx"
-        managed = path.join(_OPTIONS["ksp"], "KSP.app", "Contents", "Data", "Managed")
+
+    return path.join(managed, name)
+end
+
+function ksp_bundle(name)
+    if not _OPTIONS["ksp"] then
+        return name
+    end
+    local managed = path.join(_OPTIONS["ksp"], "KSP.app", "Contents", "Data", "Managed")
+
     return path.join(managed, name)
 end
 
@@ -171,7 +178,10 @@ solution "Keron"
             buildoptions { "/nostdlib" }
         end
         flags { "Unsafe" }
-        links({ ksp_assembly "System.dll", ksp_assembly "mscorlib.dll" })
+        filter "system:not macosx"
+	    links({ ksp_assembly "System.dll", ksp_assembly "mscorlib.dll" })
+        filter "system:macosx"
+	    links({ ksp_bundle "System.dll", ksp_bundle "mscorlib.dll" })
 
     project "server"
         kind "ConsoleApp"

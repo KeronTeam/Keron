@@ -119,7 +119,7 @@ solution "Keron"
     project "flatbuffers-net"
 	kind "SharedLib"
 	language "C#"
-	framework "2.0"
+	framework "3.5" -- Uses Linq.
 	targetname "FlatBuffers"
         targetdir(lib_outdir)
 	files { "flatbuffers/net/**.cs" }
@@ -214,7 +214,7 @@ solution "Keron"
     project "client"
         kind "SharedLib"
         language "C#"
-        framework "2.0"
+        framework "3.5"
         targetname "KeronClient"
         targetdir(lib_outdir)
         files { "client/**.cs" }

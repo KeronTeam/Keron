@@ -119,7 +119,7 @@ solution "Keron"
     project "flatbuffers-net"
 	kind "SharedLib"
 	language "C#"
-	framework "3.5"
+	framework "3.5" -- Uses Linq.
 	targetname "FlatBuffers"
         targetdir(lib_outdir)
 	files { "flatbuffers/net/**.cs" }
@@ -170,18 +170,19 @@ solution "Keron"
     project "ENet-net"
         kind "SharedLib"
         language "C#"
+        framework "2.0"
         targetname "ENet"
         targetdir(lib_outdir)
         files { "enetcs/ENetCS/**.cs" }
         if _OPTIONS["ksp"] then
             buildoptions { "/nostdlib" }
         end
-        flags { "NoImplicitLink", "OmitDefaultLibrary" }
+        flags { "NoCopyLocal" }
         clr "Unsafe"
         filter "system:not macosx"
-	    links({ ksp_assembly "System.dll", ksp_assembly "mscorlib.dll" })
+	    links({ ksp_assembly "System.dll", ksp_assembly "System.Core.dll", ksp_assembly "mscorlib.dll" })
         filter "system:macosx"
-	    links({ ksp_bundle "System.dll", ksp_bundle "mscorlib.dll" })
+	    links({ ksp_bundle "System.dll", ksp_bundle "System.Core.dll", ksp_bundle "mscorlib.dll" })
 
     project "server"
         kind "ConsoleApp"
@@ -213,7 +214,7 @@ solution "Keron"
     project "client"
         kind "SharedLib"
         language "C#"
-        framework "4.5"
+        framework "3.5"
         targetname "KeronClient"
         targetdir(lib_outdir)
         files { "build/schemas/keron/FlightCtrlState.cs",
@@ -224,7 +225,7 @@ solution "Keron"
                 "build/schemas/keron/messages/NetID.cs",
                 "build/schemas/keron/messages/NetMessage.cs",
                 "client/**.cs" }
-        flags { "Unsafe" }
+        flags { "Unsafe", "NoCopyLocal" }
         filter "system:not macosx"
             links({ "ENet-net",
                     "flatbuffers-net", 

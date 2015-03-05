@@ -119,7 +119,7 @@ solution "Keron"
     project "flatbuffers-net"
 	kind "SharedLib"
 	language "C#"
-	framework "3.5"
+	framework "2.0"
 	targetname "FlatBuffers"
         targetdir(lib_outdir)
 	files { "flatbuffers/net/**.cs" }

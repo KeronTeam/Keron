@@ -216,7 +216,14 @@ solution "Keron"
         framework "4.5"
         targetname "KeronClient"
         targetdir(lib_outdir)
-        files { "client/**.cs" }
+        files { "build/schemas/keron/FlightCtrlState.cs",
+                "build/schemas/keron/FlightCtrlStateToggles.cs",
+                "build/schemas/keron/messages/Chat.cs",
+                "build/schemas/keron/messages/ClockSync.cs",
+                "build/schemas/keron/messages/FlightCtrl.cs",
+                "build/schemas/keron/messages/NetID.cs",
+                "build/schemas/keron/messages/NetMessage.cs",
+                "client/**.cs" }
         flags { "Unsafe" }
         filter "system:not macosx"
             links({ "ENet-net",
@@ -230,8 +237,9 @@ solution "Keron"
                     ksp_bundle "UnityEngine.dll",
                     ksp_bundle "Assembly-CSharp.dll",
                     ksp_bundle "System.dll" })
-                postbuildcommands {
-                    "{MKDIR} " .. path.join(_WORKING_DIR, target_outdir, "initSave"),
-                    "{COPY} " .. path.join(_WORKING_DIR, "client", "initSave", "*.sfs") .. " " .. path.join(_WORKING_DIR, target_outdir, "initSave")
-                }
+        prebuildschemas()
+        postbuildcommands {
+            "{MKDIR} " .. path.join(_WORKING_DIR, target_outdir, "initSave"),
+            "{COPY} " .. path.join(_WORKING_DIR, "client", "initSave", "*.sfs") .. " " .. path.join(_WORKING_DIR, target_outdir, "initSave")
+        }
 

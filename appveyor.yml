@@ -11,6 +11,8 @@ platform:
 environment:
   archive_pwd:
     secure: /dBxnu4DmsDVzbqPnYSnLGrPZRrrj9w2BNGhxjHaPzTYD1FNs71/h791kE0drs/P
+  archive_url:
+    secure: w73CoBg7zMyE6aUPAuWFbKfuqzJMtHF9w0Ehe3jL1bQEoh3PD4LMAaS9BZEUEjD7SAjPii7YYE4dQBk57s1FdQ==
   matrix:
   - VS_VERSION: vs2013
 notifications:
@@ -24,7 +26,7 @@ install:
   - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .
-  - wget --no-check-certificate -nv -O ksp-runtime.7z https://code.enquat.re/mirror/ksp-runtime-win.7z
+  - wget -q -O ksp-runtime.7z %archive_url%
   - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
   - git submodule init

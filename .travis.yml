@@ -11,7 +11,7 @@ before_script:
 - tar xzf /tmp/premake-dev-linux.tar.gz
 - cd ..
 - export PATH=$PATH:$PWD/bin
-- wget --no-check-certificate -O /tmp/ksp-runtime-linux.7z https://code.enquat.re/mirror/ksp-runtime-linux.7z
+- wget -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL
 - 7z -h
 - 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
 script:
@@ -37,3 +37,4 @@ notifications:
     secure: OVyz153fy75n5JFDesZTIUja2dAQh8pEcI1SUc5ppgaUoTCtYx04Oc60kUkm6AbDWfCLB6Z0jOXiLzMVJBgscwEnZRB7saMfA5iBJ5DpZODLJXI+s1VkHcGGIINEVLpB6/vnBZM80biDx7SlF3AC9TwJQCZNZUHE9AUfZAOkIyA=
 env:
   secure: MQJgRKOUAM0S6bY1GN/IdtJNjsAUx0X4/kh/X5NilXbRuhK5CT8l/m/jBaXfhUFjlHy3U+nI15pmu928I2aC+AWzPogMYfw0ACKhaED30koT4e9MyrRv1ZUipAMWZKB/BeMDKBo2QlyEn0cwx6XUPUTYzeu5jSwNmRpsL5sDeYQ=
+  secure: jpHgvdUaziF4+27zCW/1fBX83AYVhOmMvYyGvswiS+KoTxluGIIcy+L6Dxuf8544SWVVeo+J6U7T9fieOBwCgcbgoltypUkW/k72XqKG33XrY30Wljec1nFww8wvEQvN9cT5v8tjeJ/kz3RhJTwsEiFMtz0xuEmHv7vNRKvQiGY=

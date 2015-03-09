@@ -10,6 +10,7 @@ namespace client
 		public static Host host;
 		public static Peer peer;
 		public static ENet.Event @event;
+		public static string userName = "";
 
 		private static bool connected = false;
 
@@ -32,6 +33,8 @@ namespace client
 				}
 			} else {
 				Debug.LogError ("Problème de connexion, met plus de 2s à répondre");
+				peer.Disconnect (0);
+				host.Dispose ();
 			}
 		}
 
@@ -49,6 +52,7 @@ namespace client
 
 		public static string receiveChatMessage ()
 		{
+			string colorFrom = "CCCCFF";
 			string returnMessage = "";
 			if (ConnexionUtils.host.Service (2000, out ConnexionUtils.@event)) {
 				if (ENet.EventType.Receive == ConnexionUtils.@event.Type) {
@@ -60,7 +64,10 @@ namespace client
 						Chat mesChat = new Chat ();
 						mesChat = (Chat)messageRecieved.Message (mesChat);
 						Debug.Log ("message de chat de " + mesChat.From () + " : " + mesChat.Message ());
-						returnMessage = mesChat.From () + ": " + mesChat.Message ();
+						if (mesChat.From () == userName) {
+							colorFrom = "FF8585";
+						}
+						returnMessage = "<b><color=" + colorFrom + ">" + mesChat.From () + ": " + "</color></b>" + mesChat.Message ();
 					}
 				}
 			} else {
@@ -72,6 +79,8 @@ namespace client
 		public static string sendChatMessage (string from, string message)
 		{
 			FlatBufferBuilder fbb = new FlatBufferBuilder (1);
+
+			userName = from;
 
 			int mon = NetMessage.CreateNetMessage (fbb, 
 				NetID.Chat,

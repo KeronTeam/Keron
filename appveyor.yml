@@ -21,8 +21,8 @@ notifications:
       secure: /yDzKEpMQgO35iY7j+jAVUMy+SIk7lXe+JTCSdFM5Ap0tAMI/KcUNqp+dYKAWdj+
     channel: general
 install:
-  - cinst curl -y
-  - cinst devbox-sed -vfy
+  - cinst -y curl
+  - cinst -vfy devbox-sed
   - curl -sSL -o premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .

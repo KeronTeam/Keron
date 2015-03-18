@@ -21,12 +21,12 @@ notifications:
       secure: /yDzKEpMQgO35iY7j+jAVUMy+SIk7lXe+JTCSdFM5Ap0tAMI/KcUNqp+dYKAWdj+
     channel: general
 install:
-  - cinst -y devbox-wget
+  - cinst -y curl
   - cinst -y devbox-sed
-  - wget -nv -O premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
+  - curl -sSL -o premake.zip http://kent.dl.sourceforge.net/project/premake/Premake/nightlies/premake-dev-windows.zip
   - unzip premake.zip
   - move bin\release\premake5.exe .
-  - wget --no-check-certificate -q -O ksp-runtime.7z %archive_url%
+  - curl -sSL --insecure -o ksp-runtime.7z %archive_url%
   - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
   - git submodule init

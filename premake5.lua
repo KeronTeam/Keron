@@ -141,12 +141,6 @@ solution "Keron"
         filter "system:macosx"
             removedefines {"HAS_GETHOSTBYNAME_R", "HAS_GETHOSTBYADDR_R"}
 
-    project "vedis"
-        kind "StaticLib"
-	language "C"
-	files { "vedis/vedis.c" }
-	includedirs { "vedis/" }
-
      project "enet-shared"
         kind "SharedLib"
         language "C"
@@ -183,33 +177,6 @@ solution "Keron"
 	    links({ ksp_assembly "System.dll", ksp_assembly "System.Core.dll", ksp_assembly "mscorlib.dll" })
         filter "system:macosx"
 	    links({ ksp_bundle "System.dll", ksp_bundle "System.Core.dll", ksp_bundle "mscorlib.dll" })
-
-    project "server"
-        kind "ConsoleApp"
-	language "C++"
-        targetname "keron-server"
-        targetdir(bin_outdir)
-	includedirs {
-		"server/include",
-                "enet/include",
-                "vedis",
-		"flatbuffers/include",
-		"%{sln.location}/schemas"
-	}
-	files { "server/src/**.cpp" }
-	links { "flatbuffers-cpp", "enet-static", "vedis" }
-	prebuildschemas()
-	postbuildcommands {
-		"{MKDIR} " .. path.join(_WORKING_DIR, bin_outdir, "schemas"),
-		"{COPY} " .. path.join(_WORKING_DIR, "schemas", "server.fbs") .. " " .. path.join(_WORKING_DIR, bin_outdir, "schemas")
-	}
-
-	filter "system:windows"
-	    removefiles { "server/src/os/posix.cpp" }
-	    defines { "NOMINMAX" }
-	    links { "Winmm", "Ws2_32" }
-	filter "system:linux or macosx"
-	    removefiles { "server/src/os/windows.cpp" }
 
     project "client"
         kind "SharedLib"

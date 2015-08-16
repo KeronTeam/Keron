@@ -1,11 +1,21 @@
+sudo: false
 language: cpp
-before_install:
-- sudo apt-get update -qq
-- sudo apt-get install -y build-essential clang wget p7zip-full mono-devel mono-mcs
+addons:
+  apt:
+    packages:
+    - build-essential
+    - clang
+    - wget
+    - p7zip-full
+    - mono-devel
+    - mono-mcs
+cache:
+  directories:
+  - $HOME/tools
 before_script:
 - if [ ! -x ./scripts/setup.sh ]; then chmod +x ./scripts/setup.sh; fi
-- ./scripts/setup.sh
-- export PATH=$PWD/tools/bin:$PATH
+- if [ ! -d $HOME/tools ]; then ./scripts/setup.sh; fi
+- export PATH=$HOME/tools/bin:$PATH
 script:
 - premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
 #- sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make

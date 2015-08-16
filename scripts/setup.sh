@@ -1,6 +1,6 @@
 #!/bin/sh
-PREMAKE_VERSION=5.0-alpha4-linux
-PREMAKE_URL=http://garr.dl.sourceforge.net/project/premake/5.0/premake-${PREMAKE_VERSION}.tar.gz
+PREMAKE_VERSION=5.0.0-alpha4-linux
+PREMAKE_URL=https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-${PREMAKE_VERSION}.tar.gz
 CMAKE_VERSION=3.3.1-Linux-x86_64
 CMAKE_URL=http://www.cmake.org/files/v3.3/cmake-${CMAKE_VERSION}.tar.gz
 
@@ -21,5 +21,5 @@ ln -s $PWD/cmake-$CMAKE_VERSION/bin/* $PWD/tools/bin
 
 # KSP runtime archive.
 wget --no-check-certificate -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL
-- 7z -h
-- 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
+7z -h
+7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z

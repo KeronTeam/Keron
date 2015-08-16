@@ -26,3 +26,5 @@ ln -s $PWD/cmake-$CMAKE_VERSION/bin/ctest $PREFIX/tools/bin
 wget --no-check-certificate -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL
 7z -h
 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
+
+touch .valid

@@ -7,7 +7,7 @@ union NetID {
   FlightCtrl,
   ClockSync,
   /// Should always be last. Maximum number of items.
-  MAXNETID 
+  MAXNETID
 }
 
 table Chat  {
@@ -16,7 +16,7 @@ table Chat  {
 }
 
 table FlightCtrl {
-    state: FlightCtrlState;
+    state: keron.FlightCtrlState;
 }
 
 // Each field represents a timestamp.

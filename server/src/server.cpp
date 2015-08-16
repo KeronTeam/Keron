@@ -12,7 +12,9 @@
 #include <flatbuffers/idl.h>
 #include <flatbuffers/util.h>
 
-#include "libvedis.h"
+#include <spdlog/spdlog.h>
+
+#include "store.h"
 #include "libenet.h"
 #include "signal_handlers.h"
 
@@ -24,15 +26,17 @@
 using msg_handler = std::function<void(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)>;
 using config_ptr = std::unique_ptr<const keron::server::Configuration>;
 
+std::shared_ptr<spdlog::logger> logger;
+
 void msg_none(keron::net::host &, const keron::net::event &, const keron::messages::NetMessage &)
 {
-	std::cout << "No message.\n";
+	logger->info("No message.");
 }
 
 void msg_chat(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &msg)
 {
 	auto chat = reinterpret_cast<const keron::messages::Chat *>(msg.message());
-	std::cout << "Chat message: " << chat->message()->c_str() << std::endl;
+	logger->info("Chat message: {}", chat->message()->c_str());
 	keron::net::packet response(event.packet->data, event.packet->dataLength, event.packet->flags);
 	host.broadcast(event.channelID, response);
 }
@@ -40,7 +44,7 @@ void msg_chat(keron::net::host &host, const keron::net::event &event, const kero
 void msg_flightctrl(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &flight)
 {
 	auto flightCtrl = reinterpret_cast<const keron::messages::FlightCtrl *>(flight.message());
-	std::cout << "Flight control state" << std::endl;
+	logger->info("Flight control state");
 }
 
 void msg_clocksync(keron::net::host &host, const keron::net::event &event, const keron::messages::NetMessage &msg)
@@ -60,7 +64,7 @@ void msg_clocksync(keron::net::host &host, const keron::net::event &event, const
 
 	FinishNetMessageBuffer(fbb, replysync);
 
-	std::cout << "Client TS:" << client_ts << ". Server TS: " << server_ts << std::endl;
+	logger->info("Client TS: {}. Server TS: {}", client_ts, server_ts);
 	keron::net::packet response(fbb.GetBufferPointer(), fbb.GetSize(), event.packet->flags);
 	enet_peer_send(event.peer, event.channelID, response.release());
 }
@@ -69,7 +73,7 @@ void load_configuration(flatbuffers::Parser &parser, const std::string &schema, 
 {
 	std::string serverschema;
 	std::string configjson;
-        parser.builder_.Clear();
+    parser.builder_.Clear();
 
 	if (!flatbuffers::LoadFile(schema.c_str(), false, &serverschema))
                 throw std::runtime_error("Cannot load server schema.");
@@ -77,11 +81,11 @@ void load_configuration(flatbuffers::Parser &parser, const std::string &schema, 
 	parser.Parse(serverschema.c_str());
 
 	if (!flatbuffers::LoadFile(configfile.c_str(), false, &configjson)) {
-		std::cerr << "No server configuration found. Creating a default one." << std::endl;
+		spdlog::get("config")->warn() << "No server configuration found. Creating a default one.";
 		flatbuffers::FlatBufferBuilder fbb;
 		auto cfg = keron::server::CreateConfiguration(fbb,
 				fbb.CreateString("*"),
-				('K' << 8) | ('S' << 4) | 'P', 8, fbb.CreateString("server.vdb"));
+				('K' << 8) | ('S' << 4) | 'P', 8, fbb.CreateString("server.db"), fbb.CreateString("logs/keron.log"));
 		auto generator = flatbuffers::GeneratorOptions();
 		generator.strict_json = true;
 		FinishConfigurationBuffer(fbb, cfg);
@@ -127,37 +131,41 @@ ENetAddress initialize_server_address(const keron::server::Configuration &config
 	return address;
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
-	std::cout << "Registering signal handlers." << std::endl;
+	flatbuffers::Parser parser;
+
+	{
+		auto config = spdlog::stderr_logger_st("config");
+		load_configuration(parser, "schemas/server.fbs", "server.json");
+		spdlog::drop(config->name());
+	}
+
+	spdlog::set_async_mode();
+	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
+	logger = spdlog::rotating_logger_mt("log", settings->logs()->c_str(), 5UL * 1024UL * 1024UL, 5);
 	keron::server::register_signal_handlers();
 
-	std::cout << "Loading server configuration." << std::endl;
-	flatbuffers::Parser parser;
-	load_configuration(parser, "schemas/server.fbs", "server.json");
-
-	auto settings = keron::server::GetConfiguration(parser.builder_.GetBufferPointer());
-
-	std::cout << "Firing up storage." << std::endl;
+	logger->info() << "Firing up storage.";
 	keron::db::store datastore(settings->datastore()->c_str());
 
-	std::cout << "Preparing message handlers." << std::endl;
+	logger->info() << "Preparing message handlers.";
 	std::vector<msg_handler> handlers = initialize_messages_handlers();
 
-	std::cout << "Initializing network." << std::endl;
+	logger->info() << "Initializing network.";
 	keron::net::library enet;
 
 	auto address = initialize_server_address(*settings);
 	keron::net::host host(address, settings->maxclients(), 2);
 	if (!host) {
-		std::cerr << "ERROR: creating host." << std::endl;
+		logger->error() << "Creating host.";
 		return -3;
 	}
 
 	keron::net::event event;
 
-	std::cout << "Listening on " << settings->address()->c_str() << ":" << settings->port()
-		<< " " << settings->maxclients() << " clients allowed." << std::endl;
+	logger->info("Listening on {}:{} with {} clients allowed.",
+		settings->address()->c_str(), settings->port(), settings->maxclients());
 
 	while (host.service(event, 100) >= 0 && !keron::server::stop) {
 		switch (event.type) {
@@ -165,25 +173,21 @@ int main(void)
 			{
 				keron::net::packet packet(event.packet);
 				keron::net::address address(event.peer->address);
-				std::cout
-					<< "Received packet from "
-					<< address.ip()
-					<< " on channel " << static_cast<int>(event.channelID)
-					<< " size " << packet.length() << std::endl;
+				logger->debug("Received packet from {} on channel {} size {}B", address.ip(), event.channelID, packet.length());
 
 				flatbuffers::Verifier verifier(packet.data(), packet.length());
 				if (!keron::messages::VerifyNetMessageBuffer(verifier)) {
-					std::cout << "Incorrect buffer received." << std::endl;
+					logger->warn("Incorrect buffer received.");
 					break;
 				}
-					
+
 
 				auto message = keron::messages::GetNetMessage(packet.data());
 				keron::messages::NetID id = message->message_type();
-				std::cout << "Message is: " << static_cast<int>(id) << " " << keron::messages::EnumNameNetID(id) << std::endl;
+				logger->debug("Message is: {} {}", id, keron::messages::EnumNameNetID(id));
 
 				if (!(id < handlers.size())) {
-					std::cout << "No available handlers.";
+					logger->error("No available handlers for message ID {}", id);
 					break;
 				}
 
@@ -194,25 +198,26 @@ int main(void)
 			case ENET_EVENT_TYPE_CONNECT:
 			{
 				keron::net::address address(event.peer->address);
-				std::cout << "Connection from: " << address.ip() << std::endl;
+				logger->info("Connection from: {}", address.ip());
 			}
 				break;
 			case ENET_EVENT_TYPE_DISCONNECT:
 			{
 				keron::net::address address(event.peer->address);
-				std::cout << "Disconnection from: " << address.ip() << std::endl;
+				logger->info("Disconnection from: {}", address.ip());
 			}
 				break;
 			case ENET_EVENT_TYPE_NONE:
 				// reached timeout without incomings.
 				break;
 			default:
-				std::cout << "Unhandled event `" << event.type << "`\n";
+				logger->error("Unhandled event {}", event.type);
 		}
 	}
 
-	std::cout << "Server is shutting down." << std::endl;
-
+	logger->info("Server is shutting down.");
+	logger->flush();
+	spdlog::drop_all();
 	return 0;
 }
 

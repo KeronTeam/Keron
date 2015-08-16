@@ -10,6 +10,8 @@ table Configuration {
     maxclients:uint;
     // Path to the datastore.
     datastore:string;
+    // logging directory
+    logs:string;
 }
 
 root_type Configuration;

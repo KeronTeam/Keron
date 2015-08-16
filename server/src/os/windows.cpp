@@ -8,6 +8,8 @@
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
+#include <spdlog/spdlog.h>
+
 
 namespace keron {
 namespace server {
@@ -19,13 +21,13 @@ static BOOL handler(DWORD fdwCtrlType)
 	switch (fdwCtrlType) {
 		case CTRL_C_EVENT:
 		case CTRL_CLOSE_EVENT:
-			std::cout << "The server is going DOWN!" << std::endl;
+			spdlog::get("log")->info() << "The server is going DOWN!";
 			stop.store(1);
 			return TRUE;
 		case CTRL_BREAK_EVENT:
 		case CTRL_LOGOFF_EVENT:
 		case CTRL_SHUTDOWN_EVENT:
-			std::cout << "The server is going DOWN!" << std::endl;
+			spdlog::get("log")->info() << "The server is going DOWN!";
 			stop.store(1);
 			// Same return as the default case.
 		default:
@@ -35,7 +37,8 @@ static BOOL handler(DWORD fdwCtrlType)
 
 void register_signal_handlers()
 {
-        // We use posix-like retcode, 0 means success.
+	spdlog::get("log")->info() << "Registering signal handlers.";
+    // We use posix-like retcode, 0 means success.
 	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)handler, TRUE) != TRUE) {
 		auto errcode = static_cast<int>(GetLastError());
 		throw std::system_error({errcode, std::system_category()}, "Cannot register signal handler");

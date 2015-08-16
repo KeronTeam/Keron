@@ -7,9 +7,13 @@
 [submodule "enet"]
 	path = enet
 	url = https://github.com/lsalzman/enet.git
-[submodule "vedis"]
-	path = vedis
-	url = https://github.com/symisc/vedis.git
-[submodule "glog"]
-	path = glog
-	url = https://github.com/google/glog.git
+[submodule "lmdb"]
+	path = lmdb
+	url = https://github.com/LMDB/lmdb.git
+[submodule "lmdbxx"]
+	path = lmdbxx
+	url = https://github.com/bendiken/lmdbxx.git
+[submodule "spdlog"]
+	path = spdlog
+	url = https://github.com/gregoire-astruc/spdlog.git
+	branch = full-fledge-library

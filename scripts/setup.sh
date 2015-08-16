@@ -17,8 +17,10 @@ tar -C $PREFIX/tools/bin -xzf /tmp/premake-dev-linux.tar.gz
 wget -O /tmp/cmake-linux.tar.gz $CMAKE_URL
 ls -l /tmp/cmake-linux.tar.gz
 file /tmp/cmake-linux.tar.gz
-tar -C $PREFIX/tools -xzf /tmp/cmake.tar.gz
-ln -s $PWD/cmake-$CMAKE_VERSION/bin/* $PREFIX/tools/bin
+tar -C $PREFIX/tools -xzf /tmp/cmake-linux.tar.gz
+ln -s $PWD/cmake-$CMAKE_VERSION/bin/cmake $PREFIX/tools/bin
+ln -s $PWD/cmake-$CMAKE_VERSION/bin/cpack $PREFIX/tools/bin
+ln -s $PWD/cmake-$CMAKE_VERSION/bin/ctest $PREFIX/tools/bin
 
 # KSP runtime archive.
 wget --no-check-certificate -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL

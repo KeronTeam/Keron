@@ -1,6 +1,6 @@
 #!/bin/sh
-PREFIX=$HOME
-PREMAKE_VERSION=5.0.0-alpha4-linux
+PREFIX=$1
+PREMAKE_VERSION=5.0.0.alpha4-linux
 PREMAKE_URL=https://github.com/premake/premake-core/releases/download/v5.0.0.alpha4/premake-${PREMAKE_VERSION}.tar.gz
 CMAKE_VERSION=3.3.1-Linux-x86_64
 CMAKE_URL=http://www.cmake.org/files/v3.3/cmake-${CMAKE_VERSION}.tar.gz

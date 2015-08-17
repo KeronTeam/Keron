@@ -1,8 +1,8 @@
 sudo: false
 language: cpp
 env:
-  - CC="ccache gcc-4.8" CXX="ccache g++-4.8"
-  - CC="ccache clang-3.5" CXX="ccache clang++-3.5"
+- CC="ccache gcc-4.8" CXX="ccache g++-4.8"
+- CC="ccache clang-3.5" CXX="ccache clang++-3.5"
 addons:
   apt:
     packages:
@@ -27,6 +27,8 @@ before_script:
 - ./scripts/setup.sh $HOME
 - export PATH=$HOME/tools/bin:$PATH
 script:
+- echo $CC
+- echo $CXX
 - if [ ! -x ./scripts/client.sh ]; then chmod +x ./scripts/client.sh; fi
 -  ./scripts/client.sh $PWD/KSP_runtime
 - mkdir server-build

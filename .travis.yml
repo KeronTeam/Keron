@@ -9,6 +9,7 @@ addons:
     - p7zip-full
     - mono-devel
     - mono-mcs
+    - ninja-build
 cache:
   directories:
   - $HOME/tools
@@ -22,8 +23,8 @@ script:
 - CC=clang CXX=clang++ make -C build/ verbose=1
 - mkdir server-build
 - cd server-build
-- CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE=Release ../
-- make -j2 keron
+- CC=clang CXX=clang++ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
+- ninja -v keron
 - cp server/keron ../build/Release-x64/
 - cd ..
 before_deploy:

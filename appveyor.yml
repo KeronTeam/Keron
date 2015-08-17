@@ -20,8 +20,7 @@ notifications:
     auth_token:
       secure: /yDzKEpMQgO35iY7j+jAVUMy+SIk7lXe+JTCSdFM5Ap0tAMI/KcUNqp+dYKAWdj+
     channel: general
-install:
-  - scripts/setup.bat
+install: - scripts/setup.bat
   - curl -sSL --insecure -o ksp-runtime.7z %archive_url%
   - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
@@ -37,7 +36,6 @@ build:
   project: build\Keron.sln
   verbosity: normal
 after_build:
-  - if "%PLATFORM%"=="x86" move /y build\%CONFIGURATION%-x32 build\%CONFIGURATION%-x86
   - tree
 artifacts:
   - path: build\$(configuration)-$(platform)

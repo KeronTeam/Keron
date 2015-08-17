@@ -99,6 +99,7 @@ solution "Keron"
                 "flatbuffers/src/idl_parser.cpp",
                 "flatbuffers/src/idl_gen_text.cpp",
                 "flatbuffers/src/reflection.cpp",
+                "flatbuffers/src/idl_gen_cpp.cpp",
                 "flatbuffers/src/idl_gen_general.cpp",
                 "flatbuffers/src/idl_gen_go.cpp",
                 "flatbuffers/src/idl_gen_python.cpp",

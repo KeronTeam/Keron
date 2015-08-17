@@ -14,7 +14,7 @@ cache:
   - $HOME/tools
 before_script:
 - if [ ! -x ./scripts/setup.sh ]; then chmod +x ./scripts/setup.sh; fi
-- ./scripts/setup.sh
+- ./scripts/setup.sh $HOME
 - export PATH=$HOME/tools/bin:$PATH
 script:
 - premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake

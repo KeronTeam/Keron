@@ -1,6 +1,9 @@
 Keron
 =====
 
+ [![Travis CI](https://img.shields.io/travis/KeronTeam/Keron.svg?style=flat-square&label=Linux)](https://travis-ci.org/KeronTeam/Keron/)
+ [![AppVeyor](https://img.shields.io/appveyor/ci/gregoire-astruc/keron.svg?style=flat-square&label=Windows)](https://ci.appveyor.com/project/gregoire-astruc/keron)
+
 **Ker**bal **On**line.
 
 Enabling you to play with friends (and foes?).

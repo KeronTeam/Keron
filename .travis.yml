@@ -22,9 +22,8 @@ before_script:
 - ./scripts/setup.sh $HOME
 - export PATH=$HOME/tools/bin:$PATH
 script:
-- premake5 --cc=gcc --arch=x64 --ksp=$PWD/KSP_runtime gmake
-- sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
-- CC=gcc-4.8 CXX=g++-4.8 make -j2 -C build/ verbose=1
+- if [ ! -x ./scripts/client.sh ]; then chmod +x ./scripts/client.sh; fi
+- CC=gcc-4.8 CXX=g++-4.8 ./scripts/client.sh
 - mkdir server-build
 - cd server-build
 - CC=gcc-4.8 CXX=g++-4.8 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../

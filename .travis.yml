@@ -22,9 +22,9 @@ before_script:
 - ./scripts/setup.sh $HOME
 - export PATH=$HOME/tools/bin:$PATH
 script:
-- premake5 --cc=clang --arch=x64 --ksp=$PWD/KSP_runtime gmake
+- premake5 --cc=gcc --arch=x64 --ksp=$PWD/KSP_runtime gmake
 #- sed -i '/\@echo.*\.cs >> \$(RESPONSE)$/ { s/\\/\//g; }' build/*.make
-- CC=clang CXX=clang++ make -j2 -C build/ verbose=1
+- CC=gcc-4.8 CXX=g++-4.8 make -j2 -C build/ verbose=1
 - mkdir server-build
 - cd server-build
 - CC=gcc-4.8 CXX=g++-4.8 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../

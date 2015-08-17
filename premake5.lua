@@ -98,7 +98,7 @@ solution "Keron"
                 "flatbuffers/include/flatbuffers/reflection_generated.h",
                 "flatbuffers/src/idl_parser.cpp",
                 "flatbuffers/src/idl_gen_text.cpp",
-                "flatbuffers/src/reflection.cpp"
+                "flatbuffers/src/reflection.cpp",
                 "flatbuffers/src/idl_gen_general.cpp",
                 "flatbuffers/src/idl_gen_go.cpp",
                 "flatbuffers/src/idl_gen_python.cpp",

@@ -56,10 +56,10 @@ function prebuildschemas()
 	local fbs_files = os.matchfiles(path.join(_WORKING_DIR, "schemas", "*.fbs"))
 
 	for i, fbs in ipairs(fbs_files) do
-		local call = { flatc, "-c", "-n", "-o", out_dir, fbs }
+		local call = { flatc, "-n", "-o", out_dir, fbs }
 		table.insert(commands_list, table.concat(call, " "))
 	end
-	prebuildcommands(commands_list)
+	return commands_list
 end
 
 local target_outdir = path.join("build", "%{cfg.buildcfg}-%{cfg.architecture}")
@@ -191,8 +191,10 @@ solution "Keron"
         kind "SharedLib"
         language "C#"
         framework "3.5"
+	dependson { "flatc" }
         targetname "KeronClient"
         targetdir(lib_outdir)
+        prebuildcommands(prebuildschemas())
         files { "build/schemas/keron/FlightCtrlState.cs",
                 "build/schemas/keron/FlightCtrlStateToggles.cs",
                 "build/schemas/keron/messages/Chat.cs",
@@ -214,7 +216,6 @@ solution "Keron"
                     ksp_bundle "UnityEngine.dll",
                     ksp_bundle "Assembly-CSharp.dll",
                     ksp_bundle "System.dll" })
-        prebuildschemas()
         postbuildcommands {
             "{MKDIR} " .. path.join(_WORKING_DIR, target_outdir, "initSave"),
             "{COPY} " .. path.join(_WORKING_DIR, "client", "initSave", "*.sfs") .. " " .. path.join(_WORKING_DIR, target_outdir, "initSave")

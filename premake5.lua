@@ -49,8 +49,13 @@ function ksp_bundle(name)
 end
 
 function prebuildschemas()
-	local flatc = path.join("%{sln.location}", "%{cfg.buildcfg}-%{cfg.architecture}", "bin", "flatc")
-        flatc = path.normalize(flatc)
+	local flatc = "%{sln.location}"
+	if os.is("windows") then
+		flatc = path.join(flatc, "$(OutDir)")
+	else
+		flatc = path.join(flatc, "%{cfg.buildcfg}-%{cfg.architecture}", "bin")
+	end
+        flatc = path.normalize(path.join(flatc, "flatc"))
         local out_dir = path.normalize(path.join("%{sln.location}", "schemas"))
 	local commands_list = {}
 	local fbs_files = os.matchfiles(path.join(_WORKING_DIR, "schemas", "*.fbs"))

@@ -18,6 +18,7 @@ environment:
     secure: w73CoBg7zMyE6aUPAuWFbKfuqzJMtHF9w0Ehe3jL1bQEoh3PD4LMAaS9BZEUEjD7SAjPii7YYE4dQBk57s1FdQ==
   matrix:
   - VS_VERSION: vs2013
+  - VS_VERSION: vs2015
 notifications:
   - provider: Slack
     auth_token:

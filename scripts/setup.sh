@@ -11,7 +11,7 @@ CMAKE_URL=http://www.cmake.org/files/v3.3/cmake-${CMAKE_VERSION_FULL}.tar.gz
 
 echo "PREFIX: $PREFIX"
 
-[ ! -d $PREFIX/tools ] && mkdir -p $PREFIX/tools/bin
+[ ! -d $PREFIX/tools/bin ] && mkdir -p $PREFIX/tools/bin
 
 # Premake
 # Update iff it does not exist or the version has changed.

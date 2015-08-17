@@ -33,10 +33,12 @@ before_build:
   - dir build
   - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" build\ENet-net.csproj
   - tree
+  - cd build
 build:
-  project: build\Keron.sln
+  project: Keron.sln
   verbosity: normal
 after_build:
+  - cd ..
   - tree
 artifacts:
   - path: build\$(configuration)-$(platform)

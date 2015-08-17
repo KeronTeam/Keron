@@ -1,4 +1,7 @@
 version: 1.0.{build}
+cache:
+- C:\ProgramData\chocolatey\bin -> scripts/client.bat
+- C:\ProgramData\chocolatey\lib -> scripts/client.bat
 branches:
   only:
   - master

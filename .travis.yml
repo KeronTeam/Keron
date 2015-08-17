@@ -29,7 +29,7 @@ script:
 - cd server-build
 - CC=gcc-4.8 CXX=g++-4.8 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
 - ninja -v keron
-- cp server/keron ../build/Release-x64/
+- cp server/keron ../build/Release-x64/bin/
 - cd ..
 before_deploy:
 - cd build/

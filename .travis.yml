@@ -27,7 +27,7 @@ script:
 - CC=clang CXX=clang++ make -j2 -C build/ verbose=1
 - mkdir server-build
 - cd server-build
-- CC=clang CXX=clang++ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
+- CC=gcc-4.8 CXX=g++-4.8 cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
 - ninja -v keron
 - cp server/keron ../build/Release-x64/
 - cd ..

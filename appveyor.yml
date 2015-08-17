@@ -20,7 +20,8 @@ notifications:
     auth_token:
       secure: /yDzKEpMQgO35iY7j+jAVUMy+SIk7lXe+JTCSdFM5Ap0tAMI/KcUNqp+dYKAWdj+
     channel: general
-install: - scripts/setup.bat
+install:
+  - scripts/setup.bat
   - curl -sSL --insecure -o ksp-runtime.7z %archive_url%
   - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
@@ -35,7 +36,8 @@ before_build:
 build:
   project: build\Keron.sln
   verbosity: normal
-after_build: tree
+after_build:
+  - tree
 artifacts:
   - path: build\$(configuration)-$(platform)
     name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)

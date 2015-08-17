@@ -32,10 +32,10 @@ before_build:
   - dir
   - dir build
   - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" build\ENet-net.csproj
+  - sed -i 's/\$(OutDir)\/..\/bin\/flatc/$(SolutionDir)\\$(OutDir)\\..\\bin\\flatc/g' build\client.csproj
   - tree
-  - cd build
 build:
-  project: Keron.sln
+  project: build/Keron.sln
   verbosity: normal
 after_build:
   - cd ..

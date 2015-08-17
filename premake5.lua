@@ -90,14 +90,18 @@ solution "Keron"
         targetdir(bin_outdir)
         includedirs { "flatbuffers/include" }
         files {
-                "flatbuffers/include/flatbuffers.h",
-                "flatbuffers/include/idl.h",
-                "flatbuffers/include/util.h",
+                "flatbuffers/include/flatbuffers/flatbuffers.h",
+                "flatbuffers/include/flatbuffers/hash.h",
+                "flatbuffers/include/flatbuffers/idl.h",
+                "flatbuffers/include/flatbuffers/util.h",
+                "flatbuffers/include/flatbuffers/reflection.h",
+                "flatbuffers/include/flatbuffers/reflection_generated.h",
                 "flatbuffers/src/idl_parser.cpp",
-                "flatbuffers/src/idl_gen_cpp.cpp",
+                "flatbuffers/src/idl_gen_text.cpp",
+                "flatbuffers/src/reflection.cpp"
                 "flatbuffers/src/idl_gen_general.cpp",
                 "flatbuffers/src/idl_gen_go.cpp",
-                "flatbuffers/src/idl_gen_text.cpp",
+                "flatbuffers/src/idl_gen_python.cpp",
                 "flatbuffers/src/idl_gen_fbs.cpp",
                 "flatbuffers/src/flatc.cpp"
         }
@@ -109,11 +113,15 @@ solution "Keron"
         targetdir(lib_outdir)
         includedirs { "flatbuffers/include" }
         files {
-            "flatbuffers/include/flatbuffers.h",
-            "flatbuffers/include/idl.h",
-            "flatbuffers/include/util.h",
-            "flatbuffers/src/idl_parser.cpp",
-            "flatbuffers/src/idl_gen_text.cpp",
+                "flatbuffers/include/flatbuffers/flatbuffers.h",
+                "flatbuffers/include/flatbuffers/hash.h",
+                "flatbuffers/include/flatbuffers/idl.h",
+                "flatbuffers/include/flatbuffers/util.h",
+                "flatbuffers/include/flatbuffers/reflection.h",
+                "flatbuffers/include/flatbuffers/reflection_generated.h",
+                "flatbuffers/src/idl_parser.cpp",
+                "flatbuffers/src/idl_gen_text.cpp",
+                "flatbuffers/src/reflection.cpp"
         }
 
     project "flatbuffers-net"
@@ -154,7 +162,7 @@ solution "Keron"
             "HAS_INET_PTON", "HAS_INET_NTOP",
             "HAS_MSGHDR_FLAGS", "HAS_SOCKLEN_T"
         }
-        
+
         filter "system:windows"
                 targetprefix "lib"
                 links { "Winmm", "Ws2_32" }
@@ -195,13 +203,13 @@ solution "Keron"
         flags { "Unsafe", "NoCopyLocal" }
         filter "system:not macosx"
             links({ "ENet-net",
-                    "flatbuffers-net", 
+                    "flatbuffers-net",
                     ksp_assembly "UnityEngine.dll",
                     ksp_assembly "Assembly-CSharp.dll",
                     ksp_assembly "System.dll" })
         filter "system:macosx"
             links({ "ENet-net",
-                    "flatbuffers-net", 
+                    "flatbuffers-net",
                     ksp_bundle "UnityEngine.dll",
                     ksp_bundle "Assembly-CSharp.dll",
                     ksp_bundle "System.dll" })

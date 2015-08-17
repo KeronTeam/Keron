@@ -5,6 +5,11 @@ PREMAKE_URL=https://github.com/premake/premake-core/releases/download/v5.0.0.alp
 CMAKE_VERSION=3.3.1-Linux-x86_64
 CMAKE_URL=http://www.cmake.org/files/v3.3/cmake-${CMAKE_VERSION}.tar.gz
 
+if [ -x $PREFIX/tools/bin/cmake ] && [ -x $PREFIX/tools/bin/premake5 ]; then
+  echo "Tools up-to-date, carrying on."
+  exit 0;
+fi
+
 [ ! -d $PREFIX/tools ] && mkdir -p $PREFIX/tools/bin
 
 # Premake
@@ -26,5 +31,3 @@ ln -s $PWD/cmake-$CMAKE_VERSION/bin/ctest $PREFIX/tools/bin
 wget --no-check-certificate -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL
 7z -h
 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
-
-touch .valid

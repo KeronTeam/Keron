@@ -35,8 +35,7 @@ before_build:
 build:
   project: build\Keron.sln
   verbosity: normal
-after_build:
-  - tree
+after_build: tree
 artifacts:
   - path: build\$(configuration)-$(platform)
     name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)

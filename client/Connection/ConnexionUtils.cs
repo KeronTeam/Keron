@@ -102,15 +102,15 @@ namespace client
 					Debug.Log ("Reception d'un message");
 					Debug.Log ("Message reçu sur le channel " + @event.ChannelID);
 
-					NetMessage messageRecieved = NetMessage.GetRootAsNetMessage (new ByteBuffer(@event.Packet.GetBytes()));
-					if (messageRecieved.MessageType() == NetID.Chat) {
+					NetMessage messageReceived = NetMessage.GetRootAsNetMessage (new ByteBuffer(@event.Packet.GetBytes()));
+					if (messageReceived.MessageType == NetID.Chat) {
 						Chat mesChat = new Chat ();
-						mesChat = (Chat)messageRecieved.Message (mesChat);
-						Debug.Log ("message de chat de " + mesChat.From () + " : " + mesChat.Message ());
-						if (mesChat.From () == userName) {
+						mesChat = (Chat)messageReceived.GetMessage (mesChat);
+						Debug.Log ("message de chat de " + mesChat.From + " : " + mesChat.Message );
+						if (mesChat.From == userName) {
 							colorFrom = "FF8585";
 						}
-						returnMessage = "<b><color=#" + colorFrom + ">" + mesChat.From () + ": " + "</color></b>" + mesChat.Message ();
+						returnMessage = "<b><color=#" + colorFrom + ">" + mesChat.From + ": " + "</color></b>" + mesChat.Message;
 					}
 				}
 			} else {
@@ -127,11 +127,11 @@ namespace client
 		{
 			FlatBufferBuilder fbb = new FlatBufferBuilder (1);
 
-			int mon = NetMessage.CreateNetMessage (fbb, 
+			var mon = NetMessage.CreateNetMessage (fbb,
 				NetID.Chat,
-				Chat.CreateChat (fbb, 
-					fbb.CreateString (userName), 
-					fbb.CreateString (message)));
+				Chat.CreateChat (fbb,
+					fbb.CreateString (userName),
+					fbb.CreateString (message)).Value);
 
 			NetMessage.FinishNetMessageBuffer (fbb, mon);
 

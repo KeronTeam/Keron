@@ -5,9 +5,9 @@ env:
   global:
     secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
   matrix:
-    - KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8"
-    - KERON_CC="ccache clang-3.5" KERON_CXX="ccache clang++-3.5"
-    - SCAN_BUILD="scan-build-3.5" KERON_CC="clang-3.5" KERON_CXX="clang++-3.5" CCC_CC="clang-3.5" CCC_CXX="clang++-3.5"
+    - KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
+    - KERON_CC="ccache clang-3.5" KERON_CXX="ccache clang++-3.5"" BUILD_TYPE=Release
+    - SCAN_BUILD="scan-build-3.5 --use-analyzer=\$CCC_CC" KERON_CC="clang-3.5" KERON_CXX="clang++-3.5" CCC_CC="clang-3.5" CCC_CXX="clang++-3.5"" BUILD_TYPE=Debug
 
 addons:
   apt:
@@ -38,7 +38,7 @@ script:
 - CC="$KERON_CC" CXX="$KERON_CXX" ./scripts/client.sh $PWD/KSP_runtime
 - mkdir server-build
 - cd server-build
-- CC="$KERON_CC" CXX="$KERON_CXX" $SCAN_BUILD cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
+- CC="$KERON_CC" CXX="$KERON_CXX" $SCAN_BUILD cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ../
 -  $SCAN_BUILD ninja -v keron
 - cp server/keron ../build/Release-x86_64/bin/
 - cd ..

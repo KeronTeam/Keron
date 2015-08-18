@@ -7,6 +7,7 @@ env:
   matrix:
     - KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8"
     - KERON_CC="ccache clang-3.5" KERON_CXX="ccache clang++-3.5"
+    - SCAN_BUILD="scan-build-3.5" KERON_CC="clang-3.5" KERON_CXX="clang++-3.5" CCC_CC="clang-3.5" CCC_CXX="clang++-3.5"
 
 addons:
   apt:
@@ -37,8 +38,8 @@ script:
 - CC="$KERON_CC" CXX="$KERON_CXX" ./scripts/client.sh $PWD/KSP_runtime
 - mkdir server-build
 - cd server-build
-- CC="$KERON_CC" CXX="$KERON_CXX" cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
-- ninja -v keron
+- CC="$KERON_CC" CXX="$KERON_CXX" $SCAN_BUILD cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ../
+-  $SCAN_BUILD ninja -v keron
 - cp server/keron ../build/Release-x86_64/bin/
 - cd ..
 before_deploy:

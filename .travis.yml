@@ -7,7 +7,7 @@ env:
   matrix:
     - KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
     - KERON_CC="ccache clang-3.5" KERON_CXX="ccache clang++-3.5"" BUILD_TYPE=Release
-    - SCAN_BUILD="scan-build-3.5 --use-analyzer $(which $CCC_CC)" KERON_CC="clang-3.5" KERON_CXX="clang++-3.5" CCC_CC="clang-3.5" CCC_CXX="clang++-3.5"" BUILD_TYPE=Debug
+    - SCAN_BUILD="scan-build-3.5 --use-analyzer \$(which \$CCC_CC)" KERON_CC="clang-3.5" KERON_CXX="clang++-3.5" CCC_CC="clang-3.5" CCC_CXX="clang++-3.5"" BUILD_TYPE=Debug
 
 addons:
   apt:

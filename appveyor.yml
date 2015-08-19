@@ -40,7 +40,7 @@ before_build:
   - copy build\ENet-net.csproj.new build\ENet-net.csproj
   - type build\ENet-net.csproj
   - type build\client.csproj
-  - ps: cat build\client.csproj | %{$_ -replace '\$(OutDir)/\.\./bin/flatc','$(SolutionDir)\\$(OutDir)\\..\\bin\\flatc'} > build\client.csproj.new
+  - ps: cat build\client.csproj | %{$_ -replace '\$\(OutDir\)/\.\./bin/flatc','$(SolutionDir)\\$(OutDir)\\..\\bin\\flatc'} > build\client.csproj.new
   - copy build\client.csproj.new build\client.csproj
   - type build\client.csproj
   - tree

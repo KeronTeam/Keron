@@ -36,12 +36,12 @@ before_build:
   - dir
   - dir build
   - type build\ENet-net.csproj
-  - ps: cat build\ENet-net.csproj | %{$_ -replace "<PropertyGroup>","<PropertyGroup><NoStdLib>true</NoStdLib>"} > build\ENet-net.csproj.new
-  - copy build\ENet-net.csproj.new build\ENet-net.csproj
+  - ps: get-content build\ENet-net.csproj | %{$_ -replace "<PropertyGroup>","<PropertyGroup><NoStdLib>true</NoStdLib>"} > build\ENet-net.csproj.new
+  - copy /B build\ENet-net.csproj.new build\ENet-net.csproj
   - type build\ENet-net.csproj
   - type build\client.csproj
-  - ps: cat build\client.csproj | %{$_ -replace '\$\(OutDir\)/\.\./bin/flatc','$(SolutionDir)\\$(OutDir)\\..\\bin\\flatc'} > build\client.csproj.new
-  - copy build\client.csproj.new build\client.csproj
+  - ps: get-content build\client.csproj | %{$_ -replace '\$\(OutDir\)/\.\./bin/flatc','$(SolutionDir)\$(OutDir)\..\bin\flatc'} > build\client.csproj.new
+  - copy /B build\client.csproj.new build\client.csproj
   - type build\client.csproj
   - tree
 build:

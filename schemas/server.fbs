@@ -12,6 +12,8 @@ table Configuration {
     datastore:string;
     // logging directory
     logs:string;
+    // Maximum cores allowed. (0 = auto)
+    concurrency:uint;
 }
 
 root_type Configuration;

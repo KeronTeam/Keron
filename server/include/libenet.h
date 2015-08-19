@@ -10,13 +10,14 @@
 namespace keron {
 namespace net {
 
-using event = ENetEvent;
+using event_t = ENetEvent;
+using peer_t = ENetPeer;
 
-using packet_ptr = std::unique_ptr<ENetPacket, decltype(&enet_packet_destroy)>;
-using host_ptr = std::unique_ptr<ENetHost, decltype(&enet_host_destroy)>;
+using packet_ptr_t = std::unique_ptr<ENetPacket, decltype(&enet_packet_destroy)>;
+using host_ptr_t = std::unique_ptr<ENetHost, decltype(&enet_host_destroy)>;
 
-struct address final {
-	address(const ENetAddress &address):addr(address) {}
+struct address_t final {
+	address_t(const ENetAddress &address):addr(address) {}
 	const std::string ip() const
 	{
 		std::vector<char> rawname(256);
@@ -31,16 +32,17 @@ private:
 	const ENetAddress &addr;
 };
 
-struct library final {
-	library() { enet_initialize(); }
-	~library() { enet_deinitialize(); }
+struct library_t final {
+	library_t() { enet_initialize(); }
+	~library_t() { enet_deinitialize(); }
 };
 
-struct packet final {
-	packet(ENetPacket *packet):packet_(packet, enet_packet_destroy) {}
+struct packet_t final {
+	packet_t():packet_t(static_cast<ENetPacket *>(nullptr)) {};
+	packet_t(ENetPacket *packet):packet_(packet, enet_packet_destroy) {}
 
 	template<typename... Args>
-	packet(Args&&... args)
+	packet_t(Args&&... args)
 		:packet_(enet_packet_create(std::forward<Args>(args)...), enet_packet_destroy)
 	{}
 
@@ -54,21 +56,21 @@ struct packet final {
 
 	operator ENetPacket *() { return packet_.get(); }
 private:
-	packet_ptr packet_;
+	packet_ptr_t packet_;
 };
 
-struct host final {
-	host(const ENetAddress &addr, int clients, int channels)
+struct host_t final {
+	host_t(const ENetAddress &addr, int clients, int channels)
 		:address(addr),
 		server(enet_host_create(&address, clients, channels, 0, 0), enet_host_destroy)
 	{}
 
-	inline int service(event &evt, uint32_t timeout)
+	inline int service(event_t &evt, uint32_t timeout)
 	{
 		return enet_host_service(*this, &evt, timeout);
 	}
 
-	inline void broadcast(uint8_t channel, packet &p)
+	inline void broadcast(uint8_t channel, packet_t &&p)
 	{
 		enet_host_broadcast(*this, channel, p.release());
 	}
@@ -77,7 +79,21 @@ struct host final {
 
 private:
 	ENetAddress address;
-	host_ptr server;
+	host_ptr_t server;
+};
+
+struct incoming_t
+{
+	int *generation;
+	event_t event;
+};
+
+struct outgoing_t
+{
+	peer_t *peer;
+	packet_t payload;
+	int *generation;
+	enet_uint8 channelID;
 };
 
 }

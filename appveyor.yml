@@ -35,8 +35,12 @@ before_build:
   - premake5.exe --arch=%PLATFORM% --ksp=KSP_runtime %VS_VERSION%
   - dir
   - dir build
-  - sed -i "/<PropertyGroup>/a<NoStdLib>true<\/NoStdLib>" build\ENet-net.csproj
-  - sed -i "s/\$(OutDir)\/..\/bin\/flatc/$(SolutionDir)\\$(OutDir)\\..\\bin\\flatc/g" build\client.csproj
+  - type build\ENet-net.csproj
+  - ps: (get-content build\ENet-net.csproj) -replace '<PropertyGroup>', '<PropertyGroup><NoStdLib>true</NoStdLib>' |  set-content -Encoding UTF8 build\ENet-net.csproj
+  - type build\ENet-net.csproj
+  - type build\client.csproj
+  - ps: (get-content build\client.csproj) -replace '\$\(OutDir\)/\.\./bin/flatc', '$(SolutionDir)\$(OutDir)\..\bin\flatc' | set-content -Encoding UTF8 build\client.csproj
+  - type build\client.csproj
   - tree
 build:
   project: build/Keron.sln

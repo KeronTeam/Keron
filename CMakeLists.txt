@@ -1,12 +1,11 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1)
 project(Keron)
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 find_package(Threads REQUIRED)
 
 set(EXTERNALS spdlog enet)
-
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-    # There's currently an issue with clang and c++11.
+    # There's currently an issue with clang and c++11 (flatbuffers forcefully sets c++0x).
     set(FlatBuffers_Library_SRCS
       ${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include/flatbuffers/flatbuffers.h
       ${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include/flatbuffers/hash.h
@@ -34,6 +33,8 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_link_libraries(flatc flatbuffers)
     target_include_directories(flatc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/flatbuffers/include)
     set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD 11)
+    set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD_REQUIRED ON)
+    set_property(TARGET flatbuffers flatc PROPERTY CXX_EXTENSIONS OFF)
 else()
     list(APPEND EXTERNALS flatbuffers)
 endif()
@@ -41,6 +42,9 @@ endif()
 foreach(EXTERNAL IN LISTS EXTERNALS)
   add_subdirectory(${EXTERNAL})
 endforeach(EXTERNAL)
+
+set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD 11)
+
 
 set(LMDB_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb)
 set(LMDB_SRCS

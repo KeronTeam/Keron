@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 project(Keron)
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 find_package(Threads REQUIRED)
@@ -55,5 +56,10 @@ add_library(lmdb ${LMDB_SRCS})
 target_include_directories(lmdb PUBLIC ${LMDB_SOURCE_PATH})
 target_link_libraries(lmdb ${CMAKE_THREAD_LIBS_INIT})
 
+add_subdirectory(cmake/Libraries/FlatBuffersNet)
+add_subdirectory(cmake/Libraries/ENetCS)
+
 add_subdirectory(schemas)
 add_subdirectory(server)
+add_subdirectory(client)
+add_subdirectory(client-cpp)

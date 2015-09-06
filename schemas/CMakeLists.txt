@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(Keron-Schemas)
+include(CSProj)
+
 set(SCHEMAS server.fbs netmessages.fbs flightctrlstate.fbs)
 set(SCHEMAS_TARGET_DEPS "")
+set(SCHEMAS_NET_DEPS)
 
 foreach(SCHEMA IN LISTS SCHEMAS)
   get_filename_component(SCHEMA_BASENAME ${SCHEMA} NAME_WE)
@@ -14,7 +17,27 @@ foreach(SCHEMA IN LISTS SCHEMAS)
 	DEPENDS ${SCHEMA_PATH}
 	WORKING_DIRECTORY ${SCHEMA_DIR}
   )
+  add_custom_target(
+    schema-${SCHEMA_BASENAME}-net
+    COMMAND flatc -o ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -n ${SCHEMA}
+    DEPENDS ${SCHEMA_PATH}
+    WORKING_DIRECTORY ${SCHEMA_DIR}
+  )
   list(APPEND SCHEMAS_TARGET_DEPS ${SCHEMA_GENERATED})
+  list(APPEND SCHEMAS_NET_DEPS schema-${SCHEMA_BASENAME}-net)
 endforeach(SCHEMA)
 
+get_target_property(FLATBUFFERS_ASSEMBLY_PATH flatbuffers-net ASSEMBLY_PATH)
+make_csproj(
+  TARGET schemas-net
+  ASSEMBLY_NAME KeronSchemas
+  ROOT_NAMESPACE keron
+  SOURCES "${CMAKE_CURRENT_BINARY_DIR}/keron/*.cs" "${CMAKE_CURRENT_BINARY_DIR}/keron/messages/*.cs"
+  FRAMEWORK v3.5
+  REFERENCES FlatBuffers mscorlib
+  ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH} ${FLATBUFFERS_ASSEMBLY_PATH}
+  NOSTDLIB TRUE
+)
+
 add_custom_target(schemas DEPENDS ${SCHEMAS_TARGET_DEPS})
+add_dependencies(schemas-net ${SCHEMAS_NET_DEPS} flatbuffers-net)

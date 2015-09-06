@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 	keron::server::register_signal_handlers();
 
 	logger->info() << "Firing up storage.";
-	keron::db::store datastore(settings->datastore()->c_str());
+	keron::db::store_t datastore(settings->datastore()->c_str());
 
 	logger->info() << "Preparing message handlers.";
 	auto handlers = initialize_messages_handlers();
@@ -248,6 +248,32 @@ int main(int argc, char *argv[])
 			{
 				keron::net::address_t address(event.peer->address);
 				logger->info("Connection from: {}", address.ip());
+				if (event.data)
+				{
+					auto clientID = event.data;
+					logger->info("Client ID {}", clientID);
+					auto txn = datastore.transaction();
+					auto dbi = lmdb::dbi::open(txn, nullptr);
+					auto cursor = lmdb::cursor::open(txn, dbi);
+					std::uint8_t count{0};
+					auto key = keron::db::make_val(clientID);
+					auto value = keron::db::make_val(count);
+					if (cursor.get(key, value, MDB_FIRST))
+					{
+						count = *value.data<std::uint8_t>();
+						logger->info("Last client count: {:d}", count);
+					}
+					else
+					{
+						logger->info("First connection.");
+					}
+					cursor.close();
+					++count;
+					value = std::move(keron::db::make_val(count));
+					dbi.put(txn, key, value);
+					txn.commit();
+				}
+
 			}
 				break;
 			case ENET_EVENT_TYPE_DISCONNECT:

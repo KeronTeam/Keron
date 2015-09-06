@@ -6,7 +6,6 @@ include(CSProj)
 
 set(REFERENCES
   System
-  System.Core
   mscorlib
 )
 

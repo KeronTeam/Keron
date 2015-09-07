@@ -4,7 +4,19 @@ project(Keron)
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 find_package(Threads REQUIRED)
 
-set(EXTERNALS spdlog enet)
+option(KERON_BUILD_SERVER "Enable the build of the server" ON)
+option(KERON_BUILD_CLIENT "Enable the build of the client" ON)
+
+if (NOT KERON_BUILD_SERVER AND NOT KERON_BUILD_CLIENT)
+    message(SEND_ERROR "At least the server *or* the client must be built!")
+endif()
+
+set(EXTERNALS)
+
+if (KERON_BUILD_SERVER)
+    set(EXTERNALS spdlog enet)
+endif(KERON_BUILD_SERVER)
+
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     # There's currently an issue with clang and c++11 (flatbuffers forcefully sets c++0x).
     set(FlatBuffers_Library_SRCS
@@ -50,20 +62,28 @@ if (NOT MSVC)
     set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD 11)
 endif()
 
-
-set(LMDB_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb)
-set(LMDB_SRCS
-    ${LMDB_SOURCE_PATH}/mdb.c
-    ${LMDB_SOURCE_PATH}/midl.c
-)
-add_library(lmdb ${LMDB_SRCS})
-target_include_directories(lmdb PUBLIC ${LMDB_SOURCE_PATH})
-target_link_libraries(lmdb ${CMAKE_THREAD_LIBS_INIT})
-
-add_subdirectory(cmake/Libraries/FlatBuffersNet)
-add_subdirectory(cmake/Libraries/ENetShared)
-add_subdirectory(cmake/Libraries/ENetCS)
+if (KERON_BUILD_CLIENT)
+    add_subdirectory(cmake/Libraries/FlatBuffersNet)
+    add_subdirectory(cmake/Libraries/ENetShared)
+    add_subdirectory(cmake/Libraries/ENetCS)
+endif(KERON_BUILD_CLIENT)
 
 add_subdirectory(schemas)
-add_subdirectory(server)
-add_subdirectory(client)
+
+if (KERON_BUILD_CLIENT)
+    add_subdirectory(client)
+endif(KERON_BUILD_CLIENT)
+
+if (KERON_BUILD_SERVER)
+    set(LMDB_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb)
+    set(LMDB_SRCS
+        ${LMDB_SOURCE_PATH}/mdb.c
+        ${LMDB_SOURCE_PATH}/midl.c
+    )
+    add_library(lmdb ${LMDB_SRCS})
+    target_include_directories(lmdb PUBLIC ${LMDB_SOURCE_PATH})
+    target_link_libraries(lmdb ${CMAKE_THREAD_LIBS_INIT})
+
+    add_subdirectory(server)
+endif(KERON_BUILD_SERVER)
+

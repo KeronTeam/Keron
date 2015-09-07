@@ -17,8 +17,8 @@ environment:
   archive_url:
     secure: w73CoBg7zMyE6aUPAuWFbKfuqzJMtHF9w0Ehe3jL1bQEoh3PD4LMAaS9BZEUEjD7SAjPii7YYE4dQBk57s1FdQ==
   matrix:
-  - VS_VERSION: vs2013
-  - VS_VERSION: vs2015
+  - VS_VERSION: 12 2013
+  - VS_VERSION: 14 2015
 notifications:
   - provider: Slack
     auth_token:
@@ -26,21 +26,16 @@ notifications:
     channel: general
 install:
   - scripts/setup.bat
-  - curl -sSL --insecure -o ksp-runtime.7z %archive_url%
-  - 7z x -p%archive_pwd% ksp-runtime.7z
 before_build:
   - git submodule init
   - git submodule update
   - del /F /S build
-  - premake5.exe --arch=%PLATFORM% --ksp=KSP_runtime %VS_VERSION%
+  - mkdir build
+  - cd build
+  - cmake -G "Visual Studio %VS_VERSION%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DKSP_MANAGED_PATH=%cd%/../KSP_runtime/KSP_Data/Managed ..
+  - cd ..
   - dir
   - dir build
-  - type build\ENet-net.csproj
-  - ps: (get-content build\ENet-net.csproj) -replace '<PropertyGroup>', '<PropertyGroup><NoStdLib>true</NoStdLib>' |  set-content -Encoding UTF8 build\ENet-net.csproj
-  - type build\ENet-net.csproj
-  - type build\client.csproj
-  - ps: (get-content build\client.csproj) -replace '\$\(OutDir\)/\.\./bin/flatc', '$(SolutionDir)\$(OutDir)\..\bin\flatc' | set-content -Encoding UTF8 build\client.csproj
-  - type build\client.csproj
   - tree
 build:
   project: build/Keron.sln

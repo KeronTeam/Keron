@@ -48,7 +48,7 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKSP_MANAGED_PATH=/path/to/your/ksp/M
 
 # Windows build
 cd build
-cmake -G 'Visual Studio 14 2015 Win64' -DCMAKE_BUILD_TYPE=Debug -DKSP_MANAGED_PATH=C:/Path/To/KSP/Managed
+cmake -G 'Visual Studio 14 2015 Win64' -DCMAKE_BUILD_TYPE=Debug -DKSP_MANAGED_PATH=C:/Path/To/KSP/Managed ..
 ```
 See the CI scripts in `scripts` for other configurations.
 

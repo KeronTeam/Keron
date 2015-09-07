@@ -37,6 +37,8 @@ build:
 after_build:
   - cd ..
   - tree
+  - msbuild /P:Configuration=%CONFIGURATION% build/PACKAGE.vcxproj
+  - copy build/*.zip build/%CONFIGURATION%-%PLATFORM%.zip
 artifacts:
   - path: build\$(configuration)-$(platform)
     name: keron-win-$(configuration)-$(platform)-$(VS_VERSION)

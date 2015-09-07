@@ -1,5 +1,5 @@
 sudo: false
-language: cpp
+language: csharp
 os: linux
 mono: latest
 env:

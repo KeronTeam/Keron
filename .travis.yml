@@ -62,9 +62,7 @@ script:
   - ./scripts/build.sh
 before_deploy:
   - cd build/
-  - tar cjf keron-linux-x64.tar.bz2 Release-x86_64/
-  - tar tjf keron-linux-x64.tar.bz2
-  - cd ../..
+  - cp *.tar.bz2 keron-linux-x64.tar.bz2
 deploy:
   provider: releases
   api_key:

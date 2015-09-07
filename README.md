@@ -21,7 +21,9 @@ Dependencies
 - [ENet](http://enet.bespin.org/): Network library.
 - [ENetCS](https://github.com/KeronTeam/enetcs): ENet for C# bindings (client-side).
 - [FlatBuffers](https://github.com/google/flatbuffers): Serialization library.
-- [Vedis](https://github.com/symisc/vedis): redis-like embedded datastore (server-side).
+- [LMDB](http://symas.com/mdb/): Eembedded datastore (server-side).
+- [lmdb++](https://github.com/bendiken/lmdbxx): C++11 wrapper for LMDB.
+- [spdlog](https://github.com/gregoire-astruc/spdlog): Logging library. 
 
 Building
 --------

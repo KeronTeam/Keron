@@ -23,4 +23,6 @@ fi
 
 ${KERON_ANALYZE} ninja -v keron
 
+[ ! "$KERON_ANALYZE" ] && ninja package
+
 cd ..

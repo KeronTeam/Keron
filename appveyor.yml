@@ -9,7 +9,7 @@ configuration:
   - Debug
   - Release
 platform:
-  - Win32
+  #- Win32
   - x64
 environment:
   archive_pwd:
@@ -17,8 +17,8 @@ environment:
   archive_url:
     secure: w73CoBg7zMyE6aUPAuWFbKfuqzJMtHF9w0Ehe3jL1bQEoh3PD4LMAaS9BZEUEjD7SAjPii7YYE4dQBk57s1FdQ==
   matrix:
-  - VS_VERSION: 12 2013
-  - VS_VERSION: 14 2015
+    #- VS_VERSION: 12 2013
+    - VS_VERSION: 14 2015
 notifications:
   - provider: Slack
     auth_token:

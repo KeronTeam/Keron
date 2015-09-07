@@ -12,7 +12,7 @@
 	url = https://github.com/LMDB/lmdb.git
 [submodule "lmdbxx"]
 	path = lmdbxx
-	url = https://github.com/bendiken/lmdbxx.git
+	url = https://github.com/gregoire-astruc/lmdbxx.git
 [submodule "spdlog"]
 	path = spdlog
 	url = https://github.com/gregoire-astruc/spdlog.git

@@ -44,7 +44,9 @@ foreach(EXTERNAL IN LISTS EXTERNALS)
   add_subdirectory(${EXTERNAL})
 endforeach(EXTERNAL)
 
-set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD 11)
+if (NOT MSVC)
+    set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD 11)
+endif()
 
 
 set(LMDB_SOURCE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lmdb/libraries/liblmdb)

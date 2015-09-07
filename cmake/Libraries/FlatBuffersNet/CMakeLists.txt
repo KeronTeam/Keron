@@ -11,6 +11,7 @@ add_custom_command(
   OUTPUT "${FLATBUFFERS_DLL}" "${FLATBUFFERS_MDB}"
   COMMAND "${CSBUILD}"
     ARGS
+      /reference:"${KSP_MANAGED_PATH}/mscorlib.dll"
       /property:Configuration=${CMAKE_BUILD_TYPE}
       /property:OutputPath="${OUTPUT_PATH}"
       /property:BaseIntermediateOutputPath="${CMAKE_CURRENT_BINARY_DIR}/obj/"

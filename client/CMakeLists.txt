@@ -20,20 +20,21 @@ set(ASSEMBLIES_PATH
         ${SCHEMAS_ASSEMBLY_PATH})
 
 set(REFERENCES
+    mscorlib
+    System
+    Assembly-CSharp
+    UnityEngine
     KeronSchemas
     ENet
     FlatBuffers
-    UnityEngine
-    Assembly-CSharp
-    System
-    mscorlib)
+)
 
 make_csproj(
   TARGET client
   ASSEMBLY_NAME KeronClient
   ROOT_NAMESPACE KeronClient
   SOURCES ${SOURCES}
-  FRAMEWORK v2.0
+  FRAMEWORK v3.5
   REFERENCES ${REFERENCES}
   ADDITIONAL_LIB_PATHS ${ASSEMBLIES_PATH}
   NOSTDLIB TRUE

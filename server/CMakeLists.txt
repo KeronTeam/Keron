@@ -36,3 +36,6 @@ target_include_directories(keron PRIVATE
   ${CMAKE_SOURCE_DIR}/lmdbxx
 )
 add_dependencies(keron schemas)
+
+install(TARGETS keron
+  RUNTIME DESTINATION server)

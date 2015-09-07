@@ -40,3 +40,13 @@ make_csproj(
 )
 
 add_dependencies(enet-cs enet-shared)
+get_target_property(ENET_CS_DLL enet-cs DLL)
+
+install(
+        FILES "${ENET_CS_DLL}"
+        DESTINATION client
+        PERMISSIONS
+          OWNER_READ OWNER_WRITE OWNER_EXECUTE
+          GROUP_READ
+          WORLD_READ
+    )

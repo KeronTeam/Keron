@@ -41,3 +41,14 @@ make_csproj(
 )
 
 add_dependencies(client schemas-net enet-cs flatbuffers-net)
+
+get_target_property(CLIENT_DLL client DLL)
+
+install(
+        FILES "${CLIENT_DLL}"
+        DESTINATION client
+        PERMISSIONS
+          OWNER_READ OWNER_WRITE OWNER_EXECUTE
+          GROUP_READ
+          WORLD_READ
+    )

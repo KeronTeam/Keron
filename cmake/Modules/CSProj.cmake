@@ -88,7 +88,12 @@ function(make_csproj)
       DEPENDS ${DEPENDENCIES}
   )
 
-  add_custom_target(${CS_TARGET} DEPENDS "${CS_DLL}" "${CS_MDB}")
-  set_target_properties(${CS_TARGET} PROPERTIES ASSEMBLY_PATH ${CS_OUTPUT_PATH})
-
+  add_custom_target(${CS_TARGET} ALL DEPENDS "${CS_DLL}" "${CS_MDB}")
+  set_target_properties(
+    ${CS_TARGET}
+    PROPERTIES
+      ASSEMBLY_PATH ${CS_OUTPUT_PATH}
+      DLL ${CS_DLL}
+      MDB ${CS_MDB}
+  )
 endfunction(make_csproj)

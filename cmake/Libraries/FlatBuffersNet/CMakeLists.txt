@@ -25,3 +25,14 @@ make_csproj(
   ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH}
   NOSTDLIB TRUE
 )
+
+get_target_property(FLATBUFFERS_NET_DLL flatbuffers-net DLL)
+
+install(
+        FILES "${FLATBUFFERS_NET_DLL}"
+        DESTINATION client
+        PERMISSIONS
+          OWNER_READ OWNER_WRITE OWNER_EXECUTE
+          GROUP_READ
+          WORLD_READ
+    )

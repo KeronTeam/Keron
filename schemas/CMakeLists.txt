@@ -41,3 +41,8 @@ make_csproj(
 
 add_custom_target(schemas DEPENDS ${SCHEMAS_TARGET_DEPS})
 add_dependencies(schemas-net ${SCHEMAS_NET_DEPS} flatbuffers-net)
+
+if(KERON_BUILD_SERVER)
+ install(FILES ${PROJECT_SOURCE_DIR}/server.fbs
+        DESTINATION server/schemas)
+endif(KERON_BUILD_SERVER)

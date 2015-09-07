@@ -64,3 +64,13 @@ endif()
 
 # The output name is somewhat a specific name for ENetCS usage.
 set_target_properties(enet-shared PROPERTIES OUTPUT_NAME libenet)
+
+install(
+        TARGETS enet-shared
+        RUNTIME DESTINATION client
+        LIBRARY DESTINATION client
+        PERMISSIONS
+          OWNER_READ OWNER_WRITE OWNER_EXECUTE
+          GROUP_READ
+          WORLD_READ
+    )

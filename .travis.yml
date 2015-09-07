@@ -3,11 +3,13 @@ language: csharp
 os: linux
 mono: latest
 
+env:
+  global:
+    secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
+
 matrix:
   include:
-    - env:
-        - KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
-        - secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
+    - env: KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
       addons:
         apt:
           packages:
@@ -19,9 +21,7 @@ matrix:
             - ccache
           sources:
             - ubuntu-toolchain-r-test
-    - env:
-        - KERON_CC="ccache clang-3.6" KERON_CXX="ccache clang++-3.6" BUILD_TYPE=Release
-        - secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
+    - env: KERON_CC="ccache clang-3.6" KERON_CXX="ccache clang++-3.6" BUILD_TYPE=Release
       addons:
         apt:
           packages:
@@ -34,9 +34,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
-    - env:
-        - KERON_CC="clang-3.6" KERON_CXX="clang++-3.6" BUILD_TYPE=Debug KERON_ANALYZE="scan-build-3.6 --use-cc clang-3.6 --use-c++ clang++-3.6"
-        - secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
+    - env: KERON_CC="clang-3.6" KERON_CXX="clang++-3.6" BUILD_TYPE=Debug KERON_ANALYZE="scan-build-3.6 --use-cc clang-3.6 --use-c++ clang++-3.6"
       addons:
         apt:
           packages:
@@ -48,6 +46,8 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
+  exclude:
+    - compiler: gcc
 
 cache:
   directories:

@@ -32,8 +32,8 @@ before_build:
   - del /F /S build
   - mkdir build
   - cd build
-  - if %PLATFORM%=="Win32" set GENERATOR="Visual Studio %VS_VERSION%"
-  - if %PLATFORM%=="x64" set GENERATOR="Visual Studio %VS_VERSION% Win64"
+  - if "%PLATFORM%"=="Win32" set GENERATOR="Visual Studio %VS_VERSION%"
+  - if "%PLATFORM%"=="x64" set GENERATOR="Visual Studio %VS_VERSION% Win64"
   - cmake -G %GENERATOR% -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DKSP_MANAGED_PATH=%cd%/../KSP_runtime/KSP_Data/Managed ..
   - cd ..
   - dir

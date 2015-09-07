@@ -4,69 +4,69 @@ os: linux
 mono: latest
 env:
   global:
-    secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
+    - secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
 
 matrix:
   include:
-  - env: KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
-    addons:
-      apt:
-        packages:
-        - build-essential
-        - g++-4.8
-        - wget
-        - p7zip-full
-        - ninja-build
-        - ccache
-        sources:
-        - ubuntu-toolchain-r-test
-  - env: KERON_CC="ccache clang-3.6" KERON_CXX="ccache clang++-3.6" BUILD_TYPE=Release
-    addons:
-      apt:
-        packages:
-        - build-essential
-        - clang-3.6
-        - wget
-        - p7zip-full
-        - ninja-build
-        - ccache
-        sources:
-        - ubuntu-toolchain-r-test
-        - llvm-toolchain-precise-3.6
-  - env: KERON_CC="clang-3.6" KERON_CXX="clang++-3.6" BUILD_TYPE=Debug KERON_ANALYZE="scan-build-3.6 --use-cc clang-3.6 --use-c++ clang++-3.6"
-    addons:
-      apt:
-        packages:
-        - build-essential
-        - clang-3.6
-        - wget
-        - p7zip-full
-        - ninja-build
-        sources:
-        - ubuntu-toolchain-r-test
-        - llvm-toolchain-precise-3.6
+    - env: KERON_CC="ccache gcc-4.8" KERON_CXX="ccache g++-4.8" BUILD_TYPE=Release
+      addons:
+        apt:
+          packages:
+            - build-essential
+            - g++-4.8
+            - wget
+            - p7zip-full
+            - ninja-build
+            - ccache
+          sources:
+            - ubuntu-toolchain-r-test
+    - env: KERON_CC="ccache clang-3.6" KERON_CXX="ccache clang++-3.6" BUILD_TYPE=Release
+      addons:
+        apt:
+          packages:
+            - build-essential
+            - clang-3.6
+            - wget
+            - p7zip-full
+            - ninja-build
+            - ccache
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
+    - env: KERON_CC="clang-3.6" KERON_CXX="clang++-3.6" BUILD_TYPE=Debug KERON_ANALYZE="scan-build-3.6 --use-cc clang-3.6 --use-c++ clang++-3.6"
+      addons:
+        apt:
+          packages:
+            - build-essential
+            - clang-3.6
+            - wget
+            - p7zip-full
+            - ninja-build
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.6
 
 cache:
   directories:
-  - $HOME/tools
-  - $HOME/.ccache
+    - $HOME/tools
+    - $HOME/.ccache
 before_script:
-- if [ ! -x ./scripts/setup.sh ]; then chmod +x ./scripts/setup.sh; fi
-- ./scripts/setup.sh $HOME
-- export PATH=$HOME/tools/bin:$PATH
+  - if [ ! -x ./scripts/setup.sh ]; then chmod +x ./scripts/setup.sh; fi
+  - ./scripts/setup.sh $HOME
+  - export PATH=$HOME/tools/bin:$PATH
 script:
-- mkdir server-build
-- cd server-build
-- if [ ! "$KERON_ANALYZE" ]; then CC="$KERON_CC" CXX="$KERON_CXX" cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ../; fi
-- if [ "$KERON_ANALYZE" ]; then ${KERON_ANALYZE} cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ../; fi
-- if [ ! "$KERON_ANALYZE" ]; then ninja -v client; fi
-- ${KERON_ANALYZE} ninja -v keron
-- cd ..
+  - mkdir server-build
+  - cd server-build
+  - if [ ! "$KERON_ANALYZE" ]; then CC="$KERON_CC" CXX="$KERON_CXX" cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ../; fi
+  - if [ "$KERON_ANALYZE" ]; then ${KERON_ANALYZE} cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ../; fi
+  - if [ ! "$KERON_ANALYZE" ]; then ninja -v client; fi
+  - ${KERON_ANALYZE} ninja -v keron
+  - cd ..
 before_deploy:
-- cd build/
-- tar cjf keron-linux-x64.tar.bz2 Release-x86_64/
-- tar tjf keron-linux-x64.tar.bz2
-- cd ../..
+  - cd build/
+  - tar cjf keron-linux-x64.tar.bz2 Release-x86_64/
+  - tar tjf keron-linux-x64.tar.bz2
+  - cd ../..
 deploy:
   provider: releases
   api_key:

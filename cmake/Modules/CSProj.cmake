@@ -47,10 +47,18 @@ function(make_csproj)
     # namespace is a magic number, UUIDv4.
     string(UUID CS_GUID NAMESPACE b3bedb1e-a742-4966-9f26-bd2c7ee949a2 NAME ${PROJECT_NAME} TYPE SHA1 UPPER)
   endif()
-  if (NOT DEFINED CS_PLATFORM)
-    # Use native platform if none specified.
-    math(EXPR CS_PLATFORM 8*${CMAKE_SIZEOF_VOID_P})
-    set(CS_PLATFORM "x${CS_PLATFORM}")
+  if (NOT DEFINED CS_PLATFORM OR "${CS_PLATFORM}" STREQUAL "")
+    if (CMAKE_GENERATOR MATCHES "^Visual Studio")
+      if (CMAKE_GENERATOR MATCHES "Win64$")
+        set(PLATFORM x64)
+      else()
+        set(PLATFORM x32)
+      endif()
+    else()
+      # Use native platform if none specified.
+      math(EXPR CS_PLATFORM 8*${CMAKE_SIZEOF_VOID_P})
+      set(CS_PLATFORM "x${CS_PLATFORM}")
+    endif()
   endif()
 
   set(CS_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}")

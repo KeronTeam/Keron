@@ -1,6 +1,7 @@
 sudo: false
 language: cpp
 os: linux
+mono: latest
 env:
   global:
     secure: hVPhmuTCs5P8YRTXG09bIguI9ZIAYbNJTlNZKJzny4ToUOnqnHKb7eBNQkXpSoUE4+V6Y/lve3nOXg7qzDVqPm33cjaNXdo4s45bMSp+Tv30ZEreJ+lQWS32pEKnglY8EK5u9xZiqRa1S+7+TXatT+OhNOIqaWhx/j5wdrBzPE4=
@@ -15,8 +16,6 @@ matrix:
         - g++-4.8
         - wget
         - p7zip-full
-        - mono-devel
-        - mono-mcs
         - ninja-build
         - ccache
         sources:
@@ -29,8 +28,6 @@ matrix:
         - clang-3.6
         - wget
         - p7zip-full
-        - mono-devel
-        - mono-mcs
         - ninja-build
         - ccache
         sources:
@@ -44,8 +41,6 @@ matrix:
         - clang-3.6
         - wget
         - p7zip-full
-        - mono-devel
-        - mono-mcs
         - ninja-build
         sources:
         - ubuntu-toolchain-r-test

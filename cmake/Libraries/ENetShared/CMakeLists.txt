@@ -58,5 +58,9 @@ add_library(enet-shared SHARED
         "${ENET_ROOT}/win32.c"
     )
 
+if (WIN32)
+  target_link_libraries(enet-shared ws2_32 winmm)
+endif()
+
 # The output name is somewhat a specific name for ENetCS usage.
 set_target_properties(enet-shared PROPERTIES OUTPUT_NAME libenet)

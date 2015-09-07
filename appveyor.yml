@@ -25,17 +25,9 @@ notifications:
       secure: /yDzKEpMQgO35iY7j+jAVUMy+SIk7lXe+JTCSdFM5Ap0tAMI/KcUNqp+dYKAWdj+
     channel: general
 install:
-  - scripts/setup.bat
+  - scripts/install.bat
 before_build:
-  - git submodule init
-  - git submodule update
-  - del /F /S build
-  - mkdir build
-  - cd build
-  - if "%PLATFORM%"=="Win32" set GENERATOR="Visual Studio %VS_VERSION%"
-  - if "%PLATFORM%"=="x64" set GENERATOR="Visual Studio %VS_VERSION% Win64"
-  - cmake -G %GENERATOR% -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DKSP_MANAGED_PATH=%cd%/../KSP_runtime/KSP_Data/Managed ..
-  - cd ..
+  - scripts/setup.bat
   - dir
   - dir build
   - tree

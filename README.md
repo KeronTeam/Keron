@@ -39,17 +39,20 @@ git submodule update
 ```
 
 
-Get a copy of [Premake 5](http://premake.bitbucket.org/download.html#v5), and make it available in your PATH.
-Then run premake with your flavor of arguments:
+Get a copy of [CMake 3.1](http://www.cmake.org/download/), or above, and make it available in your PATH.
+Then run cmake with your flavor of arguments:
 ```sh
 # Linux build
-premake5 --cc=clang gmake
+cd build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DKSP_MANAGED_PATH=/path/to/your/ksp/Managed ..
 
 # Windows build
-premake5 vs2013
+cd build
+cmake -G 'Visual Studio 14 2015 Win64' -DCMAKE_BUILD_TYPE=Debug -DKSP_MANAGED_PATH=C:/Path/To/KSP/Managed
 ```
+See the CI scripts in `scripts` for other configurations.
 
-Your solution/Makefile files will be in the `build/` directory.
+or use CMake's own GUI.
 
 Design
 ------

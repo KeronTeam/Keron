@@ -21,6 +21,11 @@ if (NOT MSVC)
   set_property(TARGET keron PROPERTY CXX_EXTENSIONS OFF)
 endif()
 target_link_libraries(keron spdlog enet flatbuffers lmdb ${CMAKE_THREAD_LIBS_INIT})
+
+if (WIN32)
+  target_link_libraries(keron ws2_32 winmm)
+endif()
+
 target_include_directories(keron PRIVATE
   include
   ${CMAKE_BINARY_DIR}/schemas

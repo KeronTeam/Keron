@@ -15,7 +15,7 @@ if [ ! "$KERON_ANALYZE" ]; then
   CC="$KERON_CC" CXX="$KERON_CXX" cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ..
   ninja -v client
 else
-  ${KERON_ANALYZE} cmake -G Ninja -DCMAKE_BUILD_TYPE$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ..
+  ${KERON_ANALYZE} cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ..
 fi
 
 ${KERON_ANALYZE} ninja -v keron

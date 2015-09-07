@@ -9,7 +9,7 @@ configuration:
   - Debug
   - Release
 platform:
-  #- Win32
+  - Win32
   - x64
 environment:
   archive_pwd:

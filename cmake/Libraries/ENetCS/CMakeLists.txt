@@ -38,3 +38,5 @@ make_csproj(
   NOSTDLIB TRUE
   UNSAFE TRUE
 )
+
+add_dependencies(enet-cs enet-shared)

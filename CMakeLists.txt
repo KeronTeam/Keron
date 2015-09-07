@@ -61,6 +61,7 @@ target_include_directories(lmdb PUBLIC ${LMDB_SOURCE_PATH})
 target_link_libraries(lmdb ${CMAKE_THREAD_LIBS_INIT})
 
 add_subdirectory(cmake/Libraries/FlatBuffersNet)
+add_subdirectory(cmake/Libraries/ENetShared)
 add_subdirectory(cmake/Libraries/ENetCS)
 
 add_subdirectory(schemas)

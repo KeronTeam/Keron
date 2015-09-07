@@ -37,6 +37,8 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set_property(TARGET flatbuffers flatc PROPERTY CXX_STANDARD_REQUIRED ON)
     set_property(TARGET flatbuffers flatc PROPERTY CXX_EXTENSIONS OFF)
 else()
+    set(FLATBUFFERS_BUILD_TESTS OFF)
+    set(FLATBUFFERS_INSTALL "Enable the installation of targets." OFF)
     list(APPEND EXTERNALS flatbuffers)
 endif()
 

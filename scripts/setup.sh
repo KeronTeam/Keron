@@ -1,5 +1,11 @@
 #!/bin/sh
 set -e
+
+if [ -z "$KERON_CC"]; then
+  echo "BAD Travis-CI env (see https://github.com/travis-ci/travis-ci/issues/4681) - SKIP"
+  exit 0
+fi
+
 PREFIX=$(readlink -f $1)
 CMAKE_VERSION=3.3.1
 CMAKE_ARCH=Linux-x86_64

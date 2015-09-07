@@ -5,8 +5,8 @@ project(ENetCS)
 include(CSProj)
 
 set(REFERENCES
-  System
   mscorlib
+  System
 )
 
 set(SOURCES
@@ -32,7 +32,7 @@ make_csproj(
   ASSEMBLY_NAME ENet
   ROOT_NAMESPACE ENet
   SOURCES ${SOURCES}
-  FRAMEWORK v2.0
+  FRAMEWORK v3.5
   REFERENCES ${REFERENCES}
   ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH}
   NOSTDLIB TRUE

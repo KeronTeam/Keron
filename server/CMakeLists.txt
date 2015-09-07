@@ -19,8 +19,6 @@ if (NOT MSVC)
   set_property(TARGET keron PROPERTY CXX_STANDARD 11)
   set_property(TARGET keron PROPERTY CXX_STANDARD_REQUIRED ON)
   set_property(TARGET keron PROPERTY CXX_EXTENSIONS OFF)
-else()
-  target_compile_definitions(keron __cplusplus 201103L)
 endif()
 target_link_libraries(keron spdlog enet flatbuffers lmdb ${CMAKE_THREAD_LIBS_INIT})
 target_include_directories(keron PRIVATE

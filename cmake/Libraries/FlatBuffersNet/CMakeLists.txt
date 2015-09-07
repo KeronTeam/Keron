@@ -14,6 +14,7 @@ add_custom_command(
       /property:Configuration=${CMAKE_BUILD_TYPE}
       /property:OutputPath="${OUTPUT_PATH}"
       /property:BaseIntermediateOutputPath="${CMAKE_CURRENT_BINARY_DIR}/obj/"
+      /property:AssemblySearchPaths="${KSP_MANAGED_PATH}"
       "${FLATBUFFERS_CSPROJ}"
 
 )

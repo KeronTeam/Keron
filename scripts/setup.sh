@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 PREFIX=$(readlink -f $1)
 CMAKE_VERSION=3.3.1
 CMAKE_ARCH=Linux-x86_64
@@ -26,7 +27,6 @@ ls -l $PREFIX/tools/bin
 
 # KSP runtime archive.
 wget --no-check-certificate -q -O /tmp/ksp-runtime-linux.7z $ARCHIVE_URL
-7z -h
 7z x -p$ARCHIVE_PWD /tmp/ksp-runtime-linux.7z
 
 $PREFIX/tools/bin/cmake --version | head -n1 | tee $PREFIX/tools/cmake.version

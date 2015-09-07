@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 # see .travis.yml for the env variables.
 
 if [ -z "$KERON_CC" ]; then 

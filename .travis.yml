@@ -58,13 +58,8 @@ before_script:
   - ./scripts/setup.sh $HOME
   - export PATH=$HOME/tools/bin:$PATH
 script:
-  - mkdir server-build
-  - cd server-build
-  - if [ ! "$KERON_ANALYZE" ]; then CC="$KERON_CC" CXX="$KERON_CXX" cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DKSP_MANAGED_PATH=$PWD/../KSP_runtime/KSP_Data/Managed ../; fi
-  - if [ "$KERON_ANALYZE" ]; then ${KERON_ANALYZE} cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE ../; fi
-  - if [ ! "$KERON_ANALYZE" ]; then ninja -v client; fi
-  - ${KERON_ANALYZE} ninja -v keron
-  - cd ..
+  - if [ ! -x ./scripts/build.sh ]; then chmod +x ./scripts/build.sh; fi
+  - ./scripts/build.sh
 before_deploy:
   - cd build/
   - tar cjf keron-linux-x64.tar.bz2 Release-x86_64/

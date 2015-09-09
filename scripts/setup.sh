@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ -z "$KERON_CC"]; then
+if [ -z "$KERON_CC" ]; then
   echo "BAD Travis-CI env (see https://github.com/travis-ci/travis-ci/issues/4681) - SKIP"
   exit 0
 fi

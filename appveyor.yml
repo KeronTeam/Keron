@@ -35,7 +35,6 @@ build:
   project: build/Keron.sln
   verbosity: normal
 after_build:
-  - cd ..
   - tree
   - msbuild /P:Configuration=%CONFIGURATION% build/PACKAGE.vcxproj
   - copy build/*.zip build/%CONFIGURATION%-%PLATFORM%.zip

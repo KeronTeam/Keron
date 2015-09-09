@@ -32,6 +32,7 @@ before_build:
   - dir build
   - tree
 build:
+  parallel: true
   project: build/Keron.sln
   verbosity: normal
 after_build:

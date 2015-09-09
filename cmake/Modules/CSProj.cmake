@@ -11,7 +11,7 @@ else()
   message(STATUS "CSBUILD: ${CSBUILD}")
 endif()
 
-set(CSPROJ_LOCATION "${CMAKE_CURRENT_LIST_DIR}" CACHE FILEPATH "csproj directory" INTERNAL)
+set(CSPROJ_LOCATION "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "csproj directory")
 
 function(sources_to_xml INPUTS OUT)
   set(${OUT})

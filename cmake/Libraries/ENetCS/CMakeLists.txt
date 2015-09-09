@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
-
-project(ENetCS)
-
 include(CSProj)
 
 set(REFERENCES
-  mscorlib
   System
 )
 
@@ -34,12 +30,10 @@ make_csproj(
   SOURCES ${SOURCES}
   FRAMEWORK v3.5
   REFERENCES ${REFERENCES}
-  ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH}
-  NOSTDLIB TRUE
+  PROJECT_REFERENCES enet-shared
   UNSAFE TRUE
 )
 
-add_dependencies(enet-cs enet-shared)
 get_target_property(ENET_CS_DLL enet-cs DLL)
 
 install(

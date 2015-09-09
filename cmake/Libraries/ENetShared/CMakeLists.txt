@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(enet-shared)
-
 # The "configure" step.
 include(CheckFunctionExists)
 include(CheckStructHasMember)
@@ -42,7 +40,7 @@ if(HAS_SOCKLEN_T)
     add_definitions(-DHAS_SOCKLEN_T=1)
 endif()
 
-get_filename_component(ENET_ROOT "${PROJECT_SOURCE_DIR}/../../../enet/" ABSOLUTE)
+get_filename_component(ENET_ROOT "${CMAKE_SOURCE_DIR}/enet/" ABSOLUTE)
 include_directories(${ENET_ROOT}/include)
 add_definitions(-DENET_DLL=1)
 

@@ -1,7 +1,4 @@
 cmake_minimum_required(VERSION 3.1)
-
-project(Keron-Client)
-
 include(CSProj)
 
 set(SOURCES
@@ -13,20 +10,14 @@ set(SOURCES
 get_target_property(ENET_ASSEMBLY_PATH enet-cs ASSEMBLY_PATH)
 get_target_property(FLATBUFFERS_ASSEMBLY_PATH flatbuffers-net ASSEMBLY_PATH)
 get_target_property(SCHEMAS_ASSEMBLY_PATH schemas-net ASSEMBLY_PATH)
-set(ASSEMBLIES_PATH
+set(ASSEMBLIES_PATH 
         ${KSP_MANAGED_PATH}
-        ${ENET_ASSEMBLY_PATH}
-        ${FLATBUFFERS_ASSEMBLY_PATH}
-        ${SCHEMAS_ASSEMBLY_PATH})
+)
 
 set(REFERENCES
-    mscorlib
-    System
+    System 
     Assembly-CSharp
     UnityEngine
-    KeronSchemas
-    ENet
-    FlatBuffers
 )
 
 make_csproj(
@@ -36,13 +27,9 @@ make_csproj(
   SOURCES ${SOURCES}
   FRAMEWORK v3.5
   REFERENCES ${REFERENCES}
-  REFERENCES_HINT ${KSP_MANAGED_PATH}
+  PROJECT_REFERENCES schemas-net enet-cs flatbuffers-net
   ADDITIONAL_LIB_PATHS ${ASSEMBLIES_PATH}
-  NOSTDLIB TRUE
-  UNSAFE TRUE
 )
-
-add_dependencies(client schemas-net enet-cs flatbuffers-net)
 
 get_target_property(CLIENT_DLL client DLL)
 

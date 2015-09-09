@@ -21,9 +21,7 @@ make_csproj(
   ROOT_NAMESPACE FlatBuffers
   SOURCES ${SOURCES}
   FRAMEWORK v3.5
-  REFERENCES mscorlib
-  ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH}
-  NOSTDLIB TRUE
+  REFERENCES System System.Core
 )
 
 get_target_property(FLATBUFFERS_NET_DLL flatbuffers-net DLL)

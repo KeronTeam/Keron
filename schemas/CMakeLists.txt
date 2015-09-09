@@ -33,14 +33,13 @@ make_csproj(
   ASSEMBLY_NAME KeronSchemas
   ROOT_NAMESPACE keron
   SOURCES "${CMAKE_CURRENT_BINARY_DIR}/keron/*.cs" "${CMAKE_CURRENT_BINARY_DIR}/keron/messages/*.cs"
-  FRAMEWORK v2.0
-  REFERENCES FlatBuffers mscorlib
-  ADDITIONAL_LIB_PATHS ${KSP_MANAGED_PATH} ${FLATBUFFERS_ASSEMBLY_PATH}
-  NOSTDLIB TRUE
+  FRAMEWORK v3.5
+  REFERENCES System.Core
+  PROJECT_REFERENCES flatbuffers-net
 )
 
 add_custom_target(schemas DEPENDS ${SCHEMAS_TARGET_DEPS})
-add_dependencies(schemas-net ${SCHEMAS_NET_DEPS} flatbuffers-net)
+add_dependencies(schemas-net ${SCHEMAS_NET_DEPS})
 
 if(KERON_BUILD_SERVER)
  install(FILES ${PROJECT_SOURCE_DIR}/server.fbs

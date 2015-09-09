@@ -16,7 +16,6 @@
     <BaseIntermediateOutputPath>@CMAKE_BINARY_DIR@/obj/@CS_ASSEMBLY_NAME@/$(Configuration)</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
     <AllowUnsafeBlocks>@CS_UNSAFE@</AllowUnsafeBlocks>
-    <AssemblySearchPaths>@CS_ADDITIONAL_LIB_PATHS@;$(AssemblySearchPaths);</AssemblySearchPaths>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|@CS_PLATFORM@' ">
     <PlatformTarget>@CS_PLATFORM@</PlatformTarget>
@@ -41,7 +40,13 @@
   <ItemGroup>
     @CS_XML_SOURCES@
   </ItemGroup>
+  <ItemGroup>
+    @CS_XML_PROJECT_REFERENCES@
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <AssemblySearchPaths>@CS_ADDITIONAL_LIB_PATHS@</AssemblySearchPaths>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
